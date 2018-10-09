@@ -1,0 +1,12 @@
+Data Contabile,Data Valuta,Importo,Divisa,Causale,Status,Canale
+09/04/2018,09/04/2018,"-8,43",EUR,imposta di bollo cc e lr - da 01/01/2018 a 31/03/2018,sps,y
+31/03/2018,01/04/2018,"-4,93",EUR,int. e comp. - competenze,sps,y
+26/03/2018,26/03/2018,2500,EUR,bonif. vs. favore - bon.da verdino corrado regalo di papa',sps,y
+09/01/2018,09/01/2018,"-8,62",EUR,imposta di bollo cc e lr - da 01/10/2017 a 31/12/2017,sps,y
+28/02/2018,01/01/2018,"2,1",EUR,int. e comp. - interessi creditori,sps,y
+28/02/2018,01/01/2018,"-4,93",EUR,int. e comp. - competenze,sps,y
+28/02/2018,22/12/2017,-30,EUR,add. pagam. diversi - ricarica wind web del 2017-12-22 ore 02.55,sps,y
+28/02/2018,28/12/2017,600,EUR,ass. circolari sbf,sps,y
+28/02/2018,28/12/2017,-600,EUR,prelevam.per resto,sps,y
+28/02/2018,28/12/2017,"444,4",EUR,disp.giro conto - estinzione k2 white,sps,y
+28/02/2018,13/12/2017,2500,EUR,bonif. vs. favore - bon.da verdino corrado regalo papa',sps,y
