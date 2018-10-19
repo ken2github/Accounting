@@ -1,9 +1,10 @@
-package books;
+package model.books;
 import java.io.File;
 import java.io.IOException;
 import java.text.ParseException;
 import java.util.Vector;
-import schema.Transaction;
+
+import model.schema.Transaction;
 import store.IO;
 import static store.io.Format.*;
 
@@ -15,7 +16,8 @@ public class CountMonthTransactions {
 	private int year;
 	private double finalBalance;
 	
-	public CountMonthTransactions(File file) throws IOException, ParseException{
+	@SuppressWarnings("deprecation")
+	public CountMonthTransactions(File file) throws IOException, ParseException, NotAlignedDateInFileException{
 		//              0       1  2    3           4
 		// Filename is YEAR-MONTH-COUNT-BALANCE-BALANCEDECIMAL
 		String[] values = file.getName().replaceAll("."+DB_EXTENSION, "").split(NORMALIZED_SEPARATOR_REGEXP);
@@ -30,7 +32,16 @@ public class CountMonthTransactions {
 		Vector<String[]> items = IO.readItems(file.getAbsolutePath(), Transaction.FIELDS);
 		
 		for (String[] strings : items) {
-			Transaction transaction = new Transaction(strings);
+			
+			Transaction transaction;
+			try {
+				transaction = new Transaction(strings);
+			} catch (ParseException e) {
+				throw new ParseException("Error in parsing ["+file.getName()+"] file. "+e.getMessage(), 0);
+				//e.printStackTrace();
+			}
+			if(transaction.getDate().getYear()+1900!=year) throw new NotAlignedDateInFileException("Year in transaction is ["+(transaction.getDate().getYear()+1900)+"] while in file is ["+year+"]");
+			if(transaction.getDate().getMonth()+1!=month) throw new NotAlignedDateInFileException("Month in transaction is ["+(transaction.getDate().getMonth())+"] while in file is ["+month+"]");
 			transactions.add(transaction);
 		}
 	}

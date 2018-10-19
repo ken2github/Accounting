@@ -13,12 +13,12 @@ public class NormalizerTest {
 
 	@Test
 	public void test() {
-		File directorySrc = new File(TestPath.BASE_PATH+"data-01\\2017 source");
-		File directoryDest = new File(TestPath.BASE_PATH+"data-01\\2017");
+		File directorySrc = new File(TestPath.BASE_PATH+"data-01\\2018 source");
+		File directoryDest = new File(TestPath.BASE_PATH+"data-01\\2018");
 		
 		try {			
 			Normalizer.directoryNormalize(directorySrc,directoryDest);
-			assertEquals(14, directoryDest.listFiles().length);
+			assertEquals(14+2, directoryDest.listFiles().length);
 			File[] files = directoryDest.listFiles();
 			Arrays.sort(files);
 			
@@ -27,22 +27,22 @@ public class NormalizerTest {
 				filenames.add(file.getName());
 			}
 			
-			assertEquals(true,filenames.contains("2017.01.BNP.6160.44.db"));
-			assertEquals(true,filenames.contains("2017.02.BNP.6090.09.db"));
-			assertEquals(true,filenames.contains("2017.03.BNP.8550.99.db"));
-			assertEquals(true,filenames.contains("2017.04.BNP.8550.99.db"));
-			assertEquals(true,filenames.contains("2017.05.BNP.8560.99.db"));
-			assertEquals(true,filenames.contains("2017.06.BNP.8560.99.db"));
+			assertEquals(true,filenames.contains("2018.01.BNP.6160.44.db"));
+			assertEquals(true,filenames.contains("2018.02.BNP.6090.09.db"));
+			assertEquals(true,filenames.contains("2018.03.BNP.8550.99.db"));
+			assertEquals(true,filenames.contains("2018.04.BNP.8550.99.db"));
+			assertEquals(true,filenames.contains("2018.05.BNP.8560.99.db"));
+			assertEquals(true,filenames.contains("2018.06.BNP.8560.99.db"));
 			
-			assertEquals(true,filenames.contains("2017.01.BPN.991.38.db"));
-			assertEquals(true,filenames.contains("2017.02.BPN.3902.95.db"));
-			assertEquals(true,filenames.contains("2017.03.BPN.6398.02.db"));
+			assertEquals(true,filenames.contains("2018.01.BPN.991.38.db"));
+			assertEquals(true,filenames.contains("2018.02.BPN.3902.95.db"));
+			assertEquals(true,filenames.contains("2018.03.BPN.6398.02.db"));
 			
-			assertEquals(true,filenames.contains("2017.05.EDE.2361.99.db"));
-			assertEquals(true,filenames.contains("2017.06.EDE.2442.55.db"));
-			assertEquals(true,filenames.contains("2017.07.EDE.2627.80.db"));
-			assertEquals(true,filenames.contains("2017.08.EDE.2808.80.db"));
-			assertEquals(true,filenames.contains("2017.09.EDE.2254.38.db"));
+			assertEquals(true,filenames.contains("2018.05.EDE.2361.99.db"));
+			assertEquals(true,filenames.contains("2018.06.EDE.2442.55.db"));
+			assertEquals(true,filenames.contains("2018.07.EDE.2627.80.db"));
+			assertEquals(true,filenames.contains("2018.08.EDE.2808.80.db"));
+			assertEquals(true,filenames.contains("2018.09.EDE.2254.38.db"));
 			
 		} catch (Exception e) {
 			// TODO Auto.generated catch block

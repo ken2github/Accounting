@@ -10,7 +10,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Vector;
-import schema.Transaction;
+
+import model.schema.Transaction;
 import store.IO;
 import store.io.FormatReader;
 import store.io.RecordMapper;

@@ -1,4 +1,4 @@
-package books;
+package model.books;
 
 import java.io.File;
 import java.io.FileFilter;
@@ -14,13 +14,18 @@ public class MonthBook {
 	private int year;
 	private int month;
 
-	public MonthBook(File yearDirectory,int month) throws IOException, ParseException  {
+	public MonthBook(File yearDirectory,int month) throws IOException, ParseException, NotAlignedDateInFileException  {
 		// directory name is YEAR
 		// find all files starting by YEAR-MONTH
 		this.year=Integer.parseInt(yearDirectory.getName());
 		this.month=month;
 		String monthString = (this.month>9)? ""+month:"0"+month; 
 
+		for (File  file : yearDirectory.listFiles()) {
+			if(!file.getName().startsWith(year+""))
+				throw new NotAlignedDateInFileException("Year in file is ["+(file.getName().substring(0, 3))+"] while in directory is ["+year+"]");
+		}
+		
 		File[] files = yearDirectory.listFiles(new FileFilter(){				
 			@Override
 			public boolean accept(File pathname) {

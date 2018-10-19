@@ -1,10 +1,10 @@
-package books;
+package model.books;
 import java.io.File;
 import java.io.IOException;
 import java.text.ParseException;
 import java.util.Vector;
 
-import schema.Schema;
+import model.schema.Schema;
 
 public class YearBook {
 
@@ -12,7 +12,7 @@ public class YearBook {
 	private Schema schema;
 	private int year;
 	
-	public YearBook(File yeardirectory) throws IOException, ParseException {
+	public YearBook(File yeardirectory) throws IOException, ParseException, NotAlignedDateInFileException {
 		// Read schema and books
 		this.year=Integer.parseInt(yeardirectory.getName());
 		

@@ -1,13 +1,14 @@
 package test.on.data00;
 import static org.junit.Assert.fail;
 import org.junit.Test;
+
+import model.books.MasterBook;
+import model.books.YearBook;
+
 import static org.junit.Assert.assertEquals;
 
 import java.io.File;
 
-
-import books.MasterBook;
-import books.YearBook;
 import test.TestPath;
 
 public class MasterBookTest {

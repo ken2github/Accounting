@@ -12,7 +12,7 @@ public class FormatMapper {
 	
 	
 	// 05/10/18,"12h49 - SODEXO FR600881 MOUGINS,FRA  MOUGINS ",transaction en cours de traitement ,"-8,20",sps.cibo,y
-	public static RecordMapper EDENRED_FORMAT = new RecordMapper(0, 3, 1, 4, 5, "dd/MM/yyyy", 6, 0); 
+	public static RecordMapper EDENRED_FORMAT = new RecordMapper(0, 3, 1, 4, 5, "dd/MM/yy", 6, 0); 
 	public static RecordMapper CUSTOM_FORMAT= new RecordMapper(0, 1, 2, 3, 4, "dd/MM/yyyy", 5, 1); 
 	
 	public static FormatReader getFormatReader(String count) throws UnmappedFormatReaderException {

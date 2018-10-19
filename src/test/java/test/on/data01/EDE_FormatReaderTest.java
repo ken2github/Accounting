@@ -15,7 +15,7 @@ public class EDE_FormatReaderTest {
 	public void test() {
 		FormatReader r = new Parametric_FormatReader(FormatMapper.EDENRED_FORMAT);
 		try {
-			r.loadSourceFile(new File(TestPath.BASE_PATH+"data-01\\2017 source\\ede.2017.05.06.07.08.09.balance.2211.08.csv"));
+			r.loadSourceFile(new File(TestPath.BASE_PATH+"data-01\\2018 source\\ede.2018.05.06.07.08.09.balance.2211.08.csv"));
 			assertTrue(true);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block

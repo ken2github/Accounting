@@ -1,4 +1,4 @@
-package books;
+package model.books;
 import java.io.File;
 import java.io.FileFilter;
 import java.io.IOException;
@@ -9,7 +9,7 @@ public class MasterBook {
 
 	private Vector<YearBook> yearBooks = new Vector<>();
 
-	public MasterBook(File dbdirectory) throws IOException, ParseException {
+	public MasterBook(File dbdirectory) throws IOException, ParseException, NotAlignedDateInFileException {
 		// read all data
 		File[] files = dbdirectory.listFiles(new FileFilter(){				
 			@Override

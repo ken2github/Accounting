@@ -14,7 +14,7 @@ public class BNP_FormatReaderTest {
 	public void test() {
 		FormatReader r = new Parametric_FormatReader(FormatMapper.BNP_FORMAT);
 		try {
-			r.loadSourceFile(new File(TestPath.BASE_PATH+"data-01\\2017 source\\bnp.2017.01.02.balance.6090.09.csv"));
+			r.loadSourceFile(new File(TestPath.BASE_PATH+"data-01\\2018 source\\bnp.2018.01.02.balance.6090.09.csv"));
 			assertTrue(true);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
