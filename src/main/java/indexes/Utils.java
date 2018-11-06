@@ -28,4 +28,8 @@ public class Utils {
 	public static String[] undelimiterizing(String index) {
 		return index.split(INDEX_DELIMITER_REGEXP,-1);
 	}
+	
+	public static String intToMonth(int month) {
+		return (month>9)? ""+month:"0"+month; 
+	}
 }

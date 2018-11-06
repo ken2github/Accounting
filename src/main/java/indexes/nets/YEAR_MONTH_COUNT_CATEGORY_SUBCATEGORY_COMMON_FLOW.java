@@ -77,7 +77,7 @@ public class YEAR_MONTH_COUNT_CATEGORY_SUBCATEGORY_COMMON_FLOW extends MapIndex 
 					String flow = (t.getAmount()>0)?"INPUT":"OUTPUT";
 					
 					String id = Utils.delimiterizing(year,month,count,category,subcategory,common,flow);
-					System.out.println(id);
+					//System.out.println(id);
 					map.put(id,map.get(id)+t.getAmount());
 				}
 			}

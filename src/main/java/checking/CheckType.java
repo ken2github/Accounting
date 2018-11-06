@@ -1,4 +1,4 @@
-package checking.coherence;
+package checking;
 
 /**
 * Missing fields (sector, common, value, date, etc)
@@ -7,26 +7,21 @@ package checking.coherence;
 * Missing count
 * 
 */
-public enum CheckType {
+public enum CheckType implements Comparable<CheckType>{
 
-	SINTAX(0,true), 
-	FINANCE(10,false);
-	
-	public int getPriority() {
-		return priority;
-	}
-
+	NOTYPE(false),
+	SINTAX(true), 
+	COMPLETENESS(true), 
+	FINANCE(true);
+		
 	public boolean isMandatory() {
 		return mandatory;
 	}
 
-	private int priority;
 	private boolean mandatory;
 	
-	CheckType(int priority,boolean mandatory) {
-		this.priority=priority;
+	CheckType(boolean mandatory) {
 		this.mandatory=mandatory;
 	}
-	
 	
 }

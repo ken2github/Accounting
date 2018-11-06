@@ -19,7 +19,13 @@ public class YearBook {
 		this.schema = new Schema(yeardirectory);
 		
 		for (int month = 1; month < 13; month++) {
-			monthBooks.add(new MonthBook(yeardirectory, month));
+			try {
+				MonthBook mb = new MonthBook(yeardirectory, month); 
+				monthBooks.add(mb);
+			} catch (FileMissingForMonthException e) {
+				//System.out.println("No file for month "+month);
+				break;
+			}
 		}
 		
 		

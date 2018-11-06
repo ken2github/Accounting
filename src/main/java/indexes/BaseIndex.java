@@ -17,8 +17,10 @@ public abstract class BaseIndex implements Index{
 	
 	
 	public Map<String, Double> getMap(){
+//		System.out.println("Stupppppp2");
 		if(map==null) {			
 			this.initMap();
+//			System.out.println("Stupppppp");
 		}
 		return map;
 	}

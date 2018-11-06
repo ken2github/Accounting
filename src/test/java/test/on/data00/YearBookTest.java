@@ -34,7 +34,7 @@ public class YearBookTest {
 		assertEquals("sps.cibo",y.getSchema().getSectors().get(1));
 		assertEquals(1,y.getSchema().getSuperSectors().size());
 		assertEquals("BPN",y.getSchema().getCounts().get(0));
-		assertEquals(12,y.getMonthBooks().size());
+		assertEquals(1,y.getMonthBooks().size());
 		assertEquals(1,y.getMonthBooks().get(0).getListOfcountMonthTransactions().size());
 		
 		MonthBook m = y.getMonthBooks().get(0);

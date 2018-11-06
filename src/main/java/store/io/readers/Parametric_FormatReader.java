@@ -3,11 +3,9 @@ package store.io.readers;
 import java.io.File;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Collections;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.Vector;
 
@@ -17,14 +15,21 @@ import store.io.FormatReader;
 import store.io.RecordMapper;
 
 public class Parametric_FormatReader implements FormatReader {
-
-	protected Map<Integer,Vector<String[]>> transactionsMap = new HashMap<Integer, Vector<String[]>>();
+	
+	protected Map<Integer,Vector<String[]>> transactionsListMap = new HashMap<Integer, Vector<String[]>>();
 	protected Map<Integer, Double> balancesMap = new HashMap<>();
-	protected Map<Integer, Boolean> validationMap = new HashMap<>();	
+	protected Map<Integer, Boolean> isValidMap = new HashMap<>();	
+	protected Map<Integer, Double> deltasMap = new HashMap<>();	
 	private RecordMapper recordMapper;
 		
 	public Parametric_FormatReader(RecordMapper recordMapper) {
 		this.recordMapper = recordMapper;
+		for (int month=1; month<=12; month++) {
+			isValidMap.put(month, false);
+			balancesMap.put(month, 0d);
+			deltasMap.put(month, 0d);
+			transactionsListMap.put(month, new Vector<>());
+		}
 	}
 		
 	@Override
@@ -32,7 +37,54 @@ public class Parametric_FormatReader implements FormatReader {
 		String[] items =  sourceFile.getName().split(NORMALIZED_SEPARATOR_REGEXP);
 		double endBalance = Double.parseDouble(items[items.length-3]+"."+items[items.length-2]);		
 		Vector<String[]> records=IO.readItems(sourceFile.getAbsolutePath(), recordMapper.getFields());		
-		Map<Integer, Double> deltaMap = new HashMap<>();
+		
+		loadTransactionMap(records);
+		loadDeltaMap();
+		
+		String[] months = Arrays.copyOfRange(items, 2, items.length-4);
+		loadValidationMap(months);
+		loadBalanceMap(endBalance);
+	}
+	
+	@Override
+	public Vector<String[]> readRecords(int month) throws NotValidMonthException{
+		if(isValidMonth(month)) {
+			return this.transactionsListMap.get(month);
+		}else {
+			String validMonths ="";
+			for (int m : isValidMap.keySet()) {
+				validMonths+=(isValidMap.get(m))?m+",":"";
+			}
+			throw new NotValidMonthException("The month ["+month+"] is not among the valid ones ["+validMonths+"]");
+		}
+	}
+
+	@Override
+	public double getBalance(int month) throws NotValidMonthException {
+		if(isValidMonth(month)) {
+			return this.balancesMap.get(month);
+		}else {
+			String validMonths ="";
+			for (int m : isValidMap.keySet()) {
+				validMonths+=(isValidMap.get(m))?m+",":"";
+			}
+			throw new NotValidMonthException("The month ["+month+"] is not among the valid ones ["+validMonths+"]");
+		}
+	}
+	
+	private boolean isValidMonth(int month) throws NotValidMonthException{
+		if((month>0)&&(month<13)) {
+			return isValidMap.get(month);
+		}else {
+			String validMonths ="";
+			for (int m : isValidMap.keySet()) {
+				validMonths+=(isValidMap.get(m))?m+",":"";
+			}
+			throw new NotValidMonthException("The month ["+month+"] is not among the valid ones ["+validMonths+"]");
+		}
+	}
+	
+	private void loadTransactionMap(Vector<String[]> records) throws Exception {
 		for (int i = 0; i < records.size(); i++) {
 			String[] record = records.get(i);
 			if(i>=recordMapper.getFirstValidRecord()){				
@@ -54,71 +106,37 @@ public class Parametric_FormatReader implements FormatReader {
 				int month = date.getMonth()+1;
 				//System.out.println("ADD ["+month+"] FOR "+date.toString()+ " BY "+record[recordMapper.getDateField()]);
 				
-				if(!transactionsMap.containsKey(month)){transactionsMap.put(month, new Vector<>());}
-				transactionsMap.get(month).addElement(normalizedRecord);	
-								
-				if(!deltaMap.containsKey(month)) {deltaMap.put(month, 0d);}				
-				deltaMap.put(month, deltaMap.get(month)+amount);				
+				//if(!transactionsMap.containsKey(month)){transactionsMap.put(month, new Vector<>());}
+				transactionsListMap.get(month).addElement(normalizedRecord);		
 			}
 		}
-		
-		//Add skipped month (if any)
-		List<Integer> keys = new ArrayList<Integer>(transactionsMap.keySet());
-		Collections.sort(keys);
-		
-		List<Integer> missingKeys = new ArrayList<Integer>();
-		for (int i = 1; i < keys.size(); i++) {
-			int month = keys.get(i);
-			if(keys.get(i-1)+1 < month) {
-				for (int missingKey = keys.get(i-1)+1; missingKey < month; missingKey++) {
-					missingKeys.add(missingKey);
-					System.out.println("Addedkey!!!!!!!!!!!!!!!! - ["+missingKey+"]");
-				}				
-			}						
+	}
+	
+	private void loadDeltaMap() {
+		for (int  month : transactionsListMap.keySet()) {
+			for (String[] normalizedRecord : transactionsListMap.get(month)) {
+				double amount = Double.parseDouble(normalizedRecord[1]+"."+normalizedRecord[2]);
+				deltasMap.put(month, deltasMap.get(month)+amount);
+			}
 		}
-		
-		for (Integer missingMonth : missingKeys) {
-			if(!transactionsMap.containsKey(missingMonth)){transactionsMap.put(missingMonth, new Vector<>());}							
-			if(!deltaMap.containsKey(missingMonth)) {deltaMap.put(missingMonth, 0d);}	
+	}
+	
+	private void loadValidationMap(String[] months) {
+		for (String month : months) {
+			isValidMap.put(Integer.parseInt(month), true);
 		}
-		
-		keys = new ArrayList<Integer>(transactionsMap.keySet());
-		Collections.sort(keys);
-		Collections.reverse(keys);		
-		for (int j = 0; j < keys.size(); j++) {
-			validationMap.put(keys.get(j), false);
-			if(j==0) {
-				balancesMap.put(keys.get(j),endBalance);
+	}
+	
+	private void loadBalanceMap(double endBalance) {
+		boolean isLastMonth = true;
+		for (int currentMonth=12; currentMonth>=1; currentMonth--) {
+			if(isLastMonth) {
+				balancesMap.put(currentMonth,endBalance);
+				isLastMonth = false;
 			}else {
-				balancesMap.put(keys.get(j), balancesMap.get(keys.get(j-1))-deltaMap.get(keys.get(j-1)));
+				balancesMap.put(currentMonth, balancesMap.get(currentMonth+1)-deltasMap.get(currentMonth+1));
 			}
-		}	
-		for (int i = 2; i < 3+items.length-7; i++) {
-			validationMap.put(Integer.parseInt(items[i]), true);
 		}
-		
-	}
-	
-	@Override
-	public Vector<String[]> readRecords(int month) throws NotValidMonthException{
-		if(isValidMonth(month)) {
-			return this.transactionsMap.get(month);
-		}else {
-			throw new NotValidMonthException();
-		}
-	}
-
-	@Override
-	public double getBalance(int month) throws NotValidMonthException {
-		if(isValidMonth(month)) {
-			return this.balancesMap.get(month);
-		}else {
-			throw new NotValidMonthException();
-		}
-	}
-	
-	private boolean isValidMonth(int month){
-		return validationMap.get(month);
 	}
 
 }

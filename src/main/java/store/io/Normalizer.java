@@ -23,6 +23,7 @@ public class Normalizer {
 		// file must bei
 		// read for count, year, months
 		String[] items = fileToNormalize.getName().split(RAW_SEPARATOR_REGEXP);
+		//System.out.println(fileToNormalize.getName());
 		String count = items[0];
 		int year = Integer.parseInt(items[1]);
 		int months = items.length-6; // with balance

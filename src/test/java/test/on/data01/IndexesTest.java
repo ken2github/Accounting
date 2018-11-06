@@ -151,7 +151,7 @@ public class IndexesTest {
 		  if (info.getName().startsWith(packagename+".")) {
 		    final Class<?> clazz = info.load();
 		    if(MapIndex.class.isAssignableFrom(clazz) && (!clazz.getName().equals(MapIndex.class.getName()))) {
-		    	System.out.println(clazz.getName());
+		    	//System.out.println(clazz.getName());
 		    				    	
 		    	Method method = clazz.getMethod("getIndexMap", YearBook.class);
 		    	Map<String, Double> map = (Map<String, Double>) method.invoke(null, yb);
@@ -168,11 +168,11 @@ public class IndexesTest {
 	}
 	
 	private void printValues(Map<String, Double> map,Class<? extends MapIndex> index) {
-		System.out.println("["+index.getName()+"] Index of ["+map.values().size()+"] values:");	
-				
-		for (String key : map.keySet()) {
-			System.out.println(" ["+key + "] = ["+map.get(key)+"]");
-		}
+//		System.out.println("["+index.getName()+"] Index of ["+map.values().size()+"] values:");	
+//				
+//		for (String key : map.keySet()) {
+//			System.out.println(" ["+key + "] = ["+map.get(key)+"]");
+//		}
 	}
 
 }

@@ -2,6 +2,8 @@ package model.schema;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Vector;
 
 import store.IO;
@@ -13,6 +15,7 @@ public class Schema {
 	public final String SECTOR_DELIMITER_REGEXP = "[.]";
 	
 	private Vector<String> counts = new Vector<>();
+	private Map<String,Double> initialBalances = new HashMap<>();
 	private Vector<String> sectors = new Vector<>();
 	private Vector<String> superSectors = new Vector<>();
 	private int year;
@@ -23,6 +26,7 @@ public class Schema {
 		Vector<String[]> items = IO.readItems(yeardirectory.getAbsolutePath()+"\\"+this.year+NORMALIZED_SEPARATOR+"counts."+DB_EXTENSION, 3);
 		for (String[] strings : items) {
 			counts.add(strings[0]);
+			initialBalances.put(strings[0], Double.parseDouble(strings[1]+"."+strings[2]+"D"));
 			//System.out.println(strings[0]);
 		}
 		
@@ -45,6 +49,10 @@ public class Schema {
 
 	public Vector<String> getCounts() {
 		return counts;
+	}
+
+	public Map<String, Double> getInitialBalances() {
+		return initialBalances;
 	}
 
 	public Vector<String> getSectors() {

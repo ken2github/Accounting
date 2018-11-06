@@ -14,7 +14,7 @@ public class MonthBook {
 	private int year;
 	private int month;
 
-	public MonthBook(File yearDirectory,int month) throws IOException, ParseException, NotAlignedDateInFileException  {
+	public MonthBook(File yearDirectory,int month) throws IOException, ParseException, NotAlignedDateInFileException , FileMissingForMonthException {
 		// directory name is YEAR
 		// find all files starting by YEAR-MONTH
 		this.year=Integer.parseInt(yearDirectory.getName());
@@ -35,6 +35,11 @@ public class MonthBook {
 				return result;
 			}			
 		});
+		
+		if(files.length==0) {
+			throw new FileMissingForMonthException();
+		}
+		
 		// fill in count transactions 
 		for(File s: files) {
 			this.listOfcountMonthTransactions.addElement(new CountMonthTransactions(s));

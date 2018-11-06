@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="ISO-8859-1">
+<title>$title</title>
+
+<style>
+table {
+  font-family: Arial, Helvetica, sans-serif;
+  border: 1px solid #FFFFFF;
+  width: 250px;
+  height: 100px;
+  text-align: center;
+  border-collapse: collapse;
+  font-size: 14px;
+  border: 2px solid #FFFFFF;
+  padding: 1px 1px;
+}
+table td.cell, table th.titled {
+  border: 2px solid #FFFFFF;
+  padding: 1px 1px;
+}
+
+table tr:nth-child(even) {
+  background: #EDEDED;
+}
+table thead {  
+  	#if($captionColor == "GREEN")
+  background: #0BA451;
+  	#elseif($captionColor == "RED")
+  background: #EB2115;
+  	#elseif($captionColor == "BLUE")
+  background: #0B6FA4;
+  	#end
+  border-bottom: 2px solid #FFFFFF;
+}
+table thead th.titled { 
+  font-weight: bold;
+  color: #FFFFFF;
+  text-align: center;
+  border-left: 2px solid #FFFFFF;
+}
+table thead th.titled:first-child {
+  border-left: none;
+}
+table tbody th.titled {
+  	#if($captionColor == "GREEN")
+  background: #0BA451;
+  	#elseif($captionColor == "RED")
+  background: #EB2115;
+  	#elseif($captionColor == "BLUE")
+  background: #0B6FA4;
+  	#end
+  font-weight: bold;
+  color: #FFFFFF;
+  text-align: center;
+  border-right: 2px solid #FFFFFF;
+}
+</style>
+
+</head>
+<body>
+
+<table>
+
+	<caption>$caption</caption>
+
+	<thead>	
+		<tr>
+	    #foreach($row in $rows)
+	    	#if($foreach.count==1)
+				#foreach($cellItem in $row)
+					<th class="titled">$cellItem</th>
+				#end
+			#end
+		#end
+	    </tr>
+  	</thead>
+  
+  	<tbody>
+    	#foreach($row in $rows)
+        	#if($foreach.count>1)
+        	<tr>      
+	        	#foreach($cellItem in $row)
+	        		#if($foreach.count==1)
+						<th class="titled">$cellItem</th>
+					#else
+						<td class="cell">$cellItem</td>
+					#end	
+				#end   		
+   			</tr>
+   			#end
+    	#end
+	</tbody>
+  
+	<!--    
+  	<tfoot>
+    	<tr>
+      		<td></td>
+	    </tr>
+	</tfoot>
+	-->
+	
+</table>
+</body>
+</html>

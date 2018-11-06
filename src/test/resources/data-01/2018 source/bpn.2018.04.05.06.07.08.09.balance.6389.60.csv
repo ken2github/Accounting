@@ -1,0 +1,7 @@
+Data Contabile,Data Valuta,Importo,Divisa,Causale,Status,Canale
+09/04/2018,09/04/2018,"10,00",EUR,imposta di bollo cc e lr - da 01/01/2018 a 31/03/2018,sps,y
+31/05/2018,01/04/2018,"-10,00",EUR,int. e comp. - competenze,sps,y
+26/06/2018,26/03/2018,10,EUR,bonif. vs. favore - bon.da verdino corrado regalo di papa',sps,y
+09/07/2018,09/01/2018,"-10,00",EUR,imposta di bollo cc e lr - da 01/10/2017 a 31/12/2017,sps,y
+28/08/2018,01/01/2018,"10,00",EUR,int. e comp. - interessi creditori,sps,y
+28/09/2018,01/01/2018,"-10,00",EUR,int. e comp. - competenze,sps,y
