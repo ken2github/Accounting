@@ -1,5 +1,6 @@
 package store.io;
 
+import store.io.readers.EdenredValidator;
 import store.io.readers.Parametric_FormatReader;
 
 public class FormatMapper {
@@ -17,6 +18,7 @@ public class FormatMapper {
 	
 	public static FormatReader getFormatReader(String count) throws UnmappedFormatReaderException {
 		RecordMapper recordMapper=null;
+		TransactionFilterException tfe= new TransactionFilterException() {};
 		
 		String lc_count = count.toLowerCase();
 		
@@ -29,7 +31,7 @@ public class FormatMapper {
 			break;
 		case "la":	recordMapper=BNP_FORMAT;	
 			break;
-		case "ede":	recordMapper=EDENRED_FORMAT;
+		case "ede":	recordMapper=EDENRED_FORMAT; tfe=new EdenredValidator();
 			break;
 		case "tik":	recordMapper=CUSTOM_FORMAT;		
 			break;
@@ -45,7 +47,7 @@ public class FormatMapper {
 			throw new UnmappedFormatReaderException();
 		}
 		
-		return new Parametric_FormatReader(recordMapper);
+		return new Parametric_FormatReader(recordMapper,tfe);
 	}
 	
 }

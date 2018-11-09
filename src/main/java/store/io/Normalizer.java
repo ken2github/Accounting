@@ -42,17 +42,21 @@ public class Normalizer {
 			// reader.getNormalizedRecord();			
 			// write in corresponding file
 			int month = Integer.parseInt(items[2+i]);			
-			double monthBalance = reader.getBalance(month);
-			String mbString = (new DecimalFormat("##.00").format(monthBalance));
+			long monthBalance = reader.getBalance(month);
+			//String mbString = (new DecimalFormat("##.00").format(((double)monthBalance)/100));
 			//System.out.println("{"+mbString+"}");
-			String balanceAmount=mbString.split(",")[0];
-			String balanceAmountDecimal=mbString.split(",")[1];				
+			//String balanceAmount=String.valueOf(monthBalance/100);//mbString.split(",")[0];
+			//String balanceAmountDecimal=String.valueOf(monthBalance/100);//mbString.split(",")[1];				
+			
+			String balanceAmount_NORMALIZED_SEPARATOR_balanceAmountDecimal = (new DecimalFormat("##.00").format(((double)monthBalance)/100)).replace(",", NORMALIZED_SEPARATOR);
+			
 			String name = 
 					year+NORMALIZED_SEPARATOR+
 					new DecimalFormat("00").format(month)+NORMALIZED_SEPARATOR+
 					(count.toUpperCase())+NORMALIZED_SEPARATOR+
-					balanceAmount+NORMALIZED_SEPARATOR+
-					balanceAmountDecimal+"."+DB_EXTENSION;
+					//balanceAmount+NORMALIZED_SEPARATOR+balanceAmountDecimal+
+					balanceAmount_NORMALIZED_SEPARATOR_balanceAmountDecimal+
+					"."+DB_EXTENSION;
 			String pathname = directoryOfNormalizedFiles.getAbsolutePath()+"\\"+name;			
 			//files[i] = new File(pathname);			
 			Vector<String[]> records = reader.readRecords(month);

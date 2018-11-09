@@ -8,7 +8,7 @@ import model.books.YearBook;
 public abstract class BaseIndex implements Index{
 	
 	protected MasterBook mb;
-	protected static Map<String, Double> map = null;
+	protected static Map<String, Long> map = null;
 	
 	public BaseIndex(MasterBook mb) {
 		this.mb=mb;
@@ -16,7 +16,7 @@ public abstract class BaseIndex implements Index{
 	
 	
 	
-	public Map<String, Double> getMap(){
+	public Map<String, Long> getMap(){
 //		System.out.println("Stupppppp2");
 		if(map==null) {			
 			this.initMap();
@@ -27,7 +27,7 @@ public abstract class BaseIndex implements Index{
 	
 	protected abstract void initMap();
 	
-	public static Map<String,Double> getIndexMap(YearBook yb){
+	public static Map<String,Long> getIndexMap(YearBook yb){
 		return null;
 	}
 	

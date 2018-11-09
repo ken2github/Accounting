@@ -9,6 +9,6 @@ public interface FormatReader extends Format {
 	
 	void loadSourceFile(File sourceFile) throws Exception;
 	Vector<String[]> readRecords(int month)throws NotValidMonthException ;
-	double getBalance(int month)throws NotValidMonthException ;
+	long getBalance(int month)throws NotValidMonthException ;
 	
 }

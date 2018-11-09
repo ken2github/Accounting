@@ -6,6 +6,6 @@ public interface Index {
 
 	//AVERAGE.YEAR.MONTH.COUNT.CATEGORY.SUBCATEGORY.COMMON.BALANCE
 	
-	Map<String, Double> getMap();
+	Map<String, Long> getMap();
 	
 }

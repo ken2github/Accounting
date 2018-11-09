@@ -27,7 +27,8 @@ public class TransactionTest {
 	
 	@SuppressWarnings("deprecation")
 	public static void myAsserts(Transaction t) {
-		assertEquals(1.0D,t.getAmount(),0.001d);
+		assertEquals(100L,t.getAmount());
+//		assertEquals(1.0D,t.getAmount(),0.001d);
 		assertEquals("spesa carrefour",t.getTitle());
 		assertTrue(t.isCommon());
 		assertEquals("sps.cibo",t.getSector());

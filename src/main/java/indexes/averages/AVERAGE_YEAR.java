@@ -11,12 +11,12 @@ import model.books.YearBook;
 
 public class AVERAGE_YEAR extends MapIndex {
 	
-	public static Map<String,Double> getIndexMap(YearBook yb){		
-		Optional<Map<String, Double>> optResult = MapIndex.alreadyComputedIndex(yb,getMyClass());
+	public static Map<String,Long> getIndexMap(YearBook yb){		
+		Optional<Map<String, Long>> optResult = MapIndex.alreadyComputedIndex(yb,getMyClass());
 		if(optResult.isPresent()) {
 			return optResult.get();
 		}else {
-			Map<String,Double> map = computeYearIndex(yb);
+			Map<String,Long> map = computeYearIndex(yb);
 			MapIndex.addComputedIndex(yb, getMyClass(), map);
 			return map;
 		}
@@ -26,8 +26,8 @@ public class AVERAGE_YEAR extends MapIndex {
 		return AVERAGE_YEAR.class;
 	}
 
-	private static Map<String,Double> computeYearIndex(YearBook yb) {
-		Map<String,Double> map = new HashMap<>();
+	private static Map<String,Long> computeYearIndex(YearBook yb) {
+		Map<String,Long> map = new HashMap<>();
 		
 		//double amount = 0;
 		//Vector<String> counts = yb.getSchema().getCounts(); 		
@@ -47,7 +47,7 @@ public class AVERAGE_YEAR extends MapIndex {
 							String id = Utils.delimiterizing(Constants.AVERAGE,year);
 							
 							if(!map.containsKey(id)) {
-								map.put(id, 0d);
+								map.put(id, 0L);
 							}
 							
 						//}
@@ -55,9 +55,9 @@ public class AVERAGE_YEAR extends MapIndex {
 					
 				//}
 				
-				Map<String,Double> depMap = YEAR_MONTH.getIndexMap(yb);
+				Map<String,Long> depMap = YEAR_MONTH.getIndexMap(yb);
 				
-				Map<String,Double> tmpAmountMap = new HashMap<>();
+				Map<String,Long> tmpAmountMap = new HashMap<>();
 				Map<String,Integer> tmpIncrementMap = new HashMap<>();
 				
 				for (String key : depMap.keySet()) {
@@ -74,7 +74,7 @@ public class AVERAGE_YEAR extends MapIndex {
 					id = Utils.delimiterizing(Constants.AVERAGE,year);
 					
 					if(!tmpAmountMap.containsKey(id)) {
-						tmpAmountMap.put(id, 0d);
+						tmpAmountMap.put(id, 0L);
 					}
 					tmpAmountMap.put(id,tmpAmountMap.get(id)+depMap.get(key));
 					

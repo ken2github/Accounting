@@ -6,6 +6,8 @@ import java.util.Vector;
 
 import model.schema.Transaction;
 import store.IO;
+import utils.MoneyConverter;
+
 import static store.io.Format.*;
 
 public class CountMonthTransactions {
@@ -14,7 +16,7 @@ public class CountMonthTransactions {
 	private String count;
 	private int month;
 	private int year;
-	private double finalBalance;
+	private long finalBalance;
 	
 	@SuppressWarnings("deprecation")
 	public CountMonthTransactions(File file) throws IOException, ParseException, NotAlignedDateInFileException{
@@ -24,7 +26,7 @@ public class CountMonthTransactions {
 		this.year=Integer.parseInt(values[0]);
 		this.month=Integer.parseInt(values[1]);
 		this.count=values[2];
-		this.finalBalance=Double.parseDouble(values[3]+"."+values[4]+"D");
+		this.finalBalance=MoneyConverter.parseDecimalStringToLong(values[3],values[4]);
 		
 		// Content is list of transactions
 		// DATE,AMOUNT,AMOUNTDECIMAL,TITLE,SECTOR,COMMON
@@ -62,7 +64,7 @@ public class CountMonthTransactions {
 		return year;
 	}
 
-	public double getFinalBalance() {
+	public long getFinalBalance() {
 		return finalBalance;
 	}
 

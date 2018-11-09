@@ -16,12 +16,12 @@ import model.schema.Transaction;
 
 public class YEAR_MONTH_COUNT_CATEGORY_SUBCATEGORY_COMMON extends MapIndex {
 
-	public static Map<String,Double> getIndexMap(YearBook yb){		
-		Optional<Map<String, Double>> optResult = MapIndex.alreadyComputedIndex(yb,getMyClass());
+	public static Map<String,Long> getIndexMap(YearBook yb){		
+		Optional<Map<String, Long>> optResult = MapIndex.alreadyComputedIndex(yb,getMyClass());
 		if(optResult.isPresent()) {
 			return optResult.get();
 		}else {
-			Map<String,Double> map = computeYearIndex(yb);
+			Map<String,Long> map = computeYearIndex(yb);
 			MapIndex.addComputedIndex(yb, getMyClass(), map);
 			return map;
 		}
@@ -31,10 +31,10 @@ public class YEAR_MONTH_COUNT_CATEGORY_SUBCATEGORY_COMMON extends MapIndex {
 		return YEAR_MONTH_COUNT_CATEGORY_SUBCATEGORY_COMMON.class;
 	}
 
-	private static Map<String,Double> computeYearIndex(YearBook yb) {
-		Map<String,Double> map = new HashMap<>();
+	private static Map<String,Long> computeYearIndex(YearBook yb) {
+		Map<String,Long> map = new HashMap<>();
 		
-		//double amount = 0;
+		//Long amount = 0;
 		Vector<String> counts = yb.getSchema().getCounts(); 
 		Vector<String> sectors = yb.getSchema().getSectors();
 		List<String> commons = Arrays.asList(new String[]{"Y","N"});
@@ -55,7 +55,7 @@ public class YEAR_MONTH_COUNT_CATEGORY_SUBCATEGORY_COMMON extends MapIndex {
 							String id = Utils.delimiterizing(year,month,count,category,subcategory,common);
 							
 							if(!map.containsKey(id)) {
-								map.put(id, 0d);
+								map.put(id, 0L);
 							}
 							
 						//}

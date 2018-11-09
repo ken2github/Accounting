@@ -1,5 +1,6 @@
 package model.schema;
 
+import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -7,13 +8,16 @@ import java.util.Locale;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import utils.MoneyConverter;
+
 public class Transaction {
 
 	public static final int FIELDS=6;
 	public static final String DATE_FORMAT="yyyy-MM-dd";
 	public static final String SECTOR_DELIMITER=".";
 	public static final String SECTOR_DELIMITER_REGEXP="[.]";
-	private double amount;
+	//private double amount;
+	private long amount;
 	
 	private String title;
 	private String sector;
@@ -30,7 +34,8 @@ public class Transaction {
 			String joined = Stream.of(strings).collect(Collectors.joining(","));
 			throw new ParseException("Transaction does not contain a parseable Common field ["+(strings[5])+"]. When parsing ["+joined+"]", 0);
 		}
-		this.amount=Float.parseFloat(strings[1]+"."+strings[2]+"D");
+		//this.amount=Float.parseFloat(strings[1]+"."+strings[2]+"D");
+		this.amount=MoneyConverter.parseDecimalStringToLong(strings[1],strings[2]);
 		// String is in format YYYY-MM-DD
 		this.date=(new SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH)).parse(strings[0]);
 	}
@@ -39,7 +44,7 @@ public class Transaction {
 		return title;
 	}
 	
-	public double getAmount() {
+	public long getAmount() {
 		return amount;
 	}
 
@@ -55,6 +60,15 @@ public class Transaction {
 	public Date getDate() {
 		return date;
 	}
-	
+
+	@Override
+	public String toString() {
+		return 
+			(new SimpleDateFormat(Transaction.DATE_FORMAT)).format(this.date).toString()+","+	//date
+			this.getAmount()+","+
+			
+			this.getTitle()+","+
+			this.getSector();
+	}
 	
 }

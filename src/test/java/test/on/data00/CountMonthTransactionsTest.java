@@ -29,7 +29,8 @@ public class CountMonthTransactionsTest {
 	
 	public static void myAsserts(CountMonthTransactions c) {
 		assertEquals("BPN",c.getCount());
-		assertEquals(501.00D,c.getFinalBalance(),0.001d);
+//		assertEquals(501.00D,c.getFinalBalance(),0.001d);
+		assertEquals(50100L,c.getFinalBalance());
 		assertEquals(1,c.getMonth());
 		assertEquals(2018,c.getYear());
 		assertEquals(1,c.getTransactions().size());

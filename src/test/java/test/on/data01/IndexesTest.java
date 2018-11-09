@@ -49,7 +49,7 @@ public class IndexesTest {
 			int commons = 2;
 			int flows = 2;
 			
-			Map<String, Double> map = YEAR_MONTH_CATEGORY_COMMON_FLOW.getIndexMap(yb);
+			Map<String, Long> map = YEAR_MONTH_CATEGORY_COMMON_FLOW.getIndexMap(yb);
 			printValues(map,YEAR_MONTH_CATEGORY_COMMON_FLOW.class);
 			assertOnIndex(years*months*categories*commons*flows,map);
 			
@@ -154,20 +154,20 @@ public class IndexesTest {
 		    	//System.out.println(clazz.getName());
 		    				    	
 		    	Method method = clazz.getMethod("getIndexMap", YearBook.class);
-		    	Map<String, Double> map = (Map<String, Double>) method.invoke(null, yb);
+		    	Map<String, Long> map = (Map<String, Long>) method.invoke(null, yb);
 		    	printValues(map,(Class<? extends MapIndex>)clazz);
 		    }			    
 		  }
 		}
 	}
 	
-	private void assertOnIndex(int expectedValues,Map<String, Double> map) {
+	private void assertOnIndex(int expectedValues,Map<String, Long> map) {
 		assertNotNull(map);
 		assertTrue(map.entrySet().size()>0);
 		assertEquals(expectedValues, map.entrySet().size());
 	}
 	
-	private void printValues(Map<String, Double> map,Class<? extends MapIndex> index) {
+	private void printValues(Map<String, Long> map,Class<? extends MapIndex> index) {
 //		System.out.println("["+index.getName()+"] Index of ["+map.values().size()+"] values:");	
 //				
 //		for (String key : map.keySet()) {

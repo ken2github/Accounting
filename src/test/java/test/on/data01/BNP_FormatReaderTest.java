@@ -5,6 +5,7 @@ import org.junit.Test;
 import java.io.File;
 import store.io.FormatMapper;
 import store.io.FormatReader;
+import store.io.TransactionFilterException;
 import store.io.readers.Parametric_FormatReader;
 import test.TestPath;
 
@@ -12,7 +13,7 @@ public class BNP_FormatReaderTest {
 
 	@Test
 	public void test() {
-		FormatReader r = new Parametric_FormatReader(FormatMapper.BNP_FORMAT);
+		FormatReader r = new Parametric_FormatReader(FormatMapper.BNP_FORMAT,new TransactionFilterException() {});
 		try {
 			r.loadSourceFile(new File(TestPath.BASE_PATH+"data-01\\2018 source\\bnp.2018.01.02.balance.6089.59.csv"));
 			assertTrue(true);

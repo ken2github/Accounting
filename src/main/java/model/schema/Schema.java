@@ -7,15 +7,17 @@ import java.util.Map;
 import java.util.Vector;
 
 import store.IO;
+import utils.MoneyConverter;
+
 import static store.io.Format.*;
 
 public class Schema {
 
-	public final String SECTOR_DELIMITER = ".";
-	public final String SECTOR_DELIMITER_REGEXP = "[.]";
+	public static final String SECTOR_DELIMITER = ".";
+	public static final String SECTOR_DELIMITER_REGEXP = "[.]";
 	
 	private Vector<String> counts = new Vector<>();
-	private Map<String,Double> initialBalances = new HashMap<>();
+	private Map<String,Long> initialBalances = new HashMap<>();
 	private Vector<String> sectors = new Vector<>();
 	private Vector<String> superSectors = new Vector<>();
 	private int year;
@@ -26,7 +28,7 @@ public class Schema {
 		Vector<String[]> items = IO.readItems(yeardirectory.getAbsolutePath()+"\\"+this.year+NORMALIZED_SEPARATOR+"counts."+DB_EXTENSION, 3);
 		for (String[] strings : items) {
 			counts.add(strings[0]);
-			initialBalances.put(strings[0], Double.parseDouble(strings[1]+"."+strings[2]+"D"));
+			initialBalances.put(strings[0], MoneyConverter.parseDecimalStringToLong(strings[1],strings[2]));
 			//System.out.println(strings[0]);
 		}
 		
@@ -51,7 +53,7 @@ public class Schema {
 		return counts;
 	}
 
-	public Map<String, Double> getInitialBalances() {
+	public Map<String, Long> getInitialBalances() {
 		return initialBalances;
 	}
 

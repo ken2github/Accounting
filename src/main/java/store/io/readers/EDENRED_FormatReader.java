@@ -20,7 +20,7 @@ public class EDENRED_FormatReader implements FormatReader {
 	}
 
 	@Override
-	public double getBalance(int month) {
+	public long getBalance(int month) {
 		// TODO Auto-generated method stub
 		return 0;
 	}

@@ -10,12 +10,12 @@ import model.books.YearBook;
 
 public class YEAR_MONTH_CATEGORY_COMMON_FLOW extends MapIndex {
 
-	public static Map<String,Double> getIndexMap(YearBook yb){		
-		Optional<Map<String, Double>> optResult = MapIndex.alreadyComputedIndex(yb,getMyClass());
+	public static Map<String,Long> getIndexMap(YearBook yb){		
+		Optional<Map<String, Long>> optResult = MapIndex.alreadyComputedIndex(yb,getMyClass());
 		if(optResult.isPresent()) {
 			return optResult.get();
 		}else {
-			Map<String,Double> map = computeYearIndex(yb);
+			Map<String,Long> map = computeYearIndex(yb);
 			MapIndex.addComputedIndex(yb, getMyClass(), map);
 			return map;
 		}
@@ -25,10 +25,10 @@ public class YEAR_MONTH_CATEGORY_COMMON_FLOW extends MapIndex {
 		return YEAR_MONTH_CATEGORY_COMMON_FLOW.class;
 	}
 
-	private static Map<String,Double> computeYearIndex(YearBook yb) {
-		Map<String,Double> map = new HashMap<>();
+	private static Map<String,Long> computeYearIndex(YearBook yb) {
+		Map<String,Long> map = new HashMap<>();
 		
-		Map<String,Double> depMap = YEAR_MONTH_CATEGORY_SUBCATEGORY_COMMON_FLOW.getIndexMap(yb);
+		Map<String,Long> depMap = YEAR_MONTH_CATEGORY_SUBCATEGORY_COMMON_FLOW.getIndexMap(yb);
 		
 		for (String key : depMap.keySet()) {
 			String[] fields = Utils.undelimiterizing(key);
@@ -44,7 +44,7 @@ public class YEAR_MONTH_CATEGORY_COMMON_FLOW extends MapIndex {
 			String id = Utils.delimiterizing(year,month,category,common,flow);
 						
 			if(!map.containsKey(id)) {
-				map.put(id, 0d);
+				map.put(id, 0L);
 			}
 			
 			map.put(id,map.get(id)+depMap.get(key));

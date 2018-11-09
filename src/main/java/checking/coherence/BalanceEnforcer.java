@@ -21,7 +21,7 @@ public class BalanceEnforcer extends AbstractExecutableRule {
 	}
 	
 	protected void _execute(YearBook yb) throws Exception{
-		Map<String, Map<Integer,Double>> partials = new HashMap<>();
+		Map<String, Map<Integer,Long>> partials = new HashMap<>();
 		for (String c : yb.getSchema().getInitialBalances().keySet()) {
 			partials.put(c, new HashMap<>());
 			partials.get(c).put(0, yb.getSchema().getInitialBalances().get(c));
@@ -42,10 +42,10 @@ public class BalanceEnforcer extends AbstractExecutableRule {
 			for (CountMonthTransactions cmt : mb.getListOfcountMonthTransactions()) {			
 				String id = Utils.delimiterizing((yb.getYear()+""),Utils.intToMonth(mb.getMonth()),cmt.getCount());	
 				//System.out.println(id);
-				double computedBalance = partials.get(cmt.getCount()).get(mb.getMonth()-1) + YEAR_MONTH_COUNT.getIndexMap(yb).get(id);
+				long computedBalance = partials.get(cmt.getCount()).get(mb.getMonth()-1) + YEAR_MONTH_COUNT.getIndexMap(yb).get(id);
 				partials.get(cmt.getCount()).put(mb.getMonth(), computedBalance);				
 				if(!(Math.pow(computedBalance-cmt.getFinalBalance(),2)<0.0001d)) {
-					double delta = computedBalance - cmt.getFinalBalance();
+					long delta = computedBalance - cmt.getFinalBalance();
 					exceptions.add(new CheckException(this, yb, mb, cmt, null, 
 							"The file reported BALANCE ["+(cmt.getFinalBalance())+"] does not equal computed BALANCE ["+(computedBalance)+"], computed using listed TRANSACTIONS and BALANCE at begin of YEAR. Delta is ["+(delta)+"]"));
 				}

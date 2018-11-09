@@ -19,7 +19,7 @@ public class NormalizerTest {
 		
 		try {			
 			Normalizer.directoryNormalize(directorySrc,directoryDest);
-			assertEquals(27+2, directoryDest.listFiles().length);
+			assertEquals(30+2, directoryDest.listFiles().length);
 			File[] files = directoryDest.listFiles();
 			Arrays.sort(files);
 			
@@ -31,14 +31,25 @@ public class NormalizerTest {
 //			assertEquals(true,(findFileStartingWith(filenames,"2018.01.BNP")).isPresent());
 			assertEquals(true,filenames.contains("2018.01.BNP.6159.94.db"));
 			assertEquals(true,filenames.contains("2018.02.BNP.6089.59.db"));
-			assertEquals(true,filenames.contains("2018.03.BNP.8550.99.db"));
-			assertEquals(true,filenames.contains("2018.04.BNP.8550.99.db"));
-			assertEquals(true,filenames.contains("2018.05.BNP.8560.99.db"));
-			assertEquals(true,filenames.contains("2018.06.BNP.8560.99.db"));
+			assertEquals(true,filenames.contains("2018.03.BNP.8551.00.db"));
+			assertEquals(true,filenames.contains("2018.04.BNP.8551.00.db"));
+			assertEquals(true,filenames.contains("2018.05.BNP.8561.00.db"));
+			assertEquals(true,filenames.contains("2018.06.BNP.8561.00.db"));
+			assertEquals(true,filenames.contains("2018.07.BNP.8546.01.db"));
+			assertEquals(true,filenames.contains("2018.08.BNP.8561.00.db"));
+			assertEquals(true,filenames.contains("2018.09.BNP.8561.00.db"));
+			assertEquals(true,filenames.contains("2018.10.BNP.8561.00.db"));
 			
 			assertEquals(true,filenames.contains("2018.01.BPN.982.97.db"));
 			assertEquals(true,filenames.contains("2018.02.BPN.3894.54.db"));
 			assertEquals(true,filenames.contains("2018.03.BPN.6389.61.db"));
+			assertEquals(true,filenames.contains("2018.04.BPN.6399.61.db"));
+			assertEquals(true,filenames.contains("2018.05.BPN.6389.61.db"));
+			assertEquals(true,filenames.contains("2018.06.BPN.6399.61.db"));
+			assertEquals(true,filenames.contains("2018.07.BPN.6389.61.db"));
+			assertEquals(true,filenames.contains("2018.08.BPN.6399.61.db"));
+			assertEquals(true,filenames.contains("2018.09.BPN.6389.61.db"));
+			assertEquals(true,filenames.contains("2018.10.BPN.6389.61.db"));
 			
 			assertEquals(true,filenames.contains("2018.01.EDE.2749.91.db"));
 			assertEquals(true,filenames.contains("2018.02.EDE.2749.91.db"));
@@ -49,6 +60,7 @@ public class NormalizerTest {
 			assertEquals(true,filenames.contains("2018.07.EDE.2627.80.db"));
 			assertEquals(true,filenames.contains("2018.08.EDE.2808.80.db"));
 			assertEquals(true,filenames.contains("2018.09.EDE.2254.38.db"));
+			assertEquals(true,filenames.contains("2018.10.EDE.2219.28.db"));
 			
 		} catch (Exception e) {
 			// TODO Auto.generated catch block

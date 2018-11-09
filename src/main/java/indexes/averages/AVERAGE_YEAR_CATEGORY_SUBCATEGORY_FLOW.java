@@ -15,12 +15,12 @@ import model.schema.Transaction;
 
 public class AVERAGE_YEAR_CATEGORY_SUBCATEGORY_FLOW extends MapIndex {
 	
-	public static Map<String,Double> getIndexMap(YearBook yb){		
-		Optional<Map<String, Double>> optResult = MapIndex.alreadyComputedIndex(yb,getMyClass());
+	public static Map<String,Long> getIndexMap(YearBook yb){		
+		Optional<Map<String, Long>> optResult = MapIndex.alreadyComputedIndex(yb,getMyClass());
 		if(optResult.isPresent()) {
 			return optResult.get();
 		}else {
-			Map<String,Double> map = computeYearIndex(yb);
+			Map<String,Long> map = computeYearIndex(yb);
 			MapIndex.addComputedIndex(yb, getMyClass(), map);
 			return map;
 		}
@@ -30,8 +30,8 @@ public class AVERAGE_YEAR_CATEGORY_SUBCATEGORY_FLOW extends MapIndex {
 		return AVERAGE_YEAR_CATEGORY_SUBCATEGORY_FLOW.class;
 	}
 
-	private static Map<String,Double> computeYearIndex(YearBook yb) {
-		Map<String,Double> map = new HashMap<>();
+	private static Map<String,Long> computeYearIndex(YearBook yb) {
+		Map<String,Long> map = new HashMap<>();
 		
 		//double amount = 0;
 		//Vector<String> counts = yb.getSchema().getCounts(); 		
@@ -52,7 +52,7 @@ public class AVERAGE_YEAR_CATEGORY_SUBCATEGORY_FLOW extends MapIndex {
 							String id = Utils.delimiterizing(Constants.AVERAGE,year,category,subcategory,flow);
 							
 							if(!map.containsKey(id)) {
-								map.put(id, 0d);
+								map.put(id, 0L);
 							}
 							
 					//	}
@@ -60,9 +60,9 @@ public class AVERAGE_YEAR_CATEGORY_SUBCATEGORY_FLOW extends MapIndex {
 					
 				}
 				
-				Map<String,Double> depMap = YEAR_MONTH_CATEGORY_SUBCATEGORY_FLOW.getIndexMap(yb);
+				Map<String,Long> depMap = YEAR_MONTH_CATEGORY_SUBCATEGORY_FLOW.getIndexMap(yb);
 				
-				Map<String,Double> tmpAmountMap = new HashMap<>();
+				Map<String,Long> tmpAmountMap = new HashMap<>();
 				Map<String,Integer> tmpIncrementMap = new HashMap<>();
 				
 				for (String key : depMap.keySet()) {
@@ -79,7 +79,7 @@ public class AVERAGE_YEAR_CATEGORY_SUBCATEGORY_FLOW extends MapIndex {
 					String id = Utils.delimiterizing(Constants.AVERAGE,year,category,subcategory,flow);
 					
 					if(!tmpAmountMap.containsKey(id)) {
-						tmpAmountMap.put(id, 0d);
+						tmpAmountMap.put(id, 0L);
 					}
 					tmpAmountMap.put(id,tmpAmountMap.get(id)+depMap.get(key));
 					
