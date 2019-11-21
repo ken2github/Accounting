@@ -6,10 +6,8 @@ import java.io.FileOutputStream;
 import java.io.PrintStream;
 import model.books.YearBook;
 import java.io.StringWriter;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
-import java.util.stream.Stream;
 
 import org.apache.velocity.VelocityContext;
 import org.apache.velocity.Template;

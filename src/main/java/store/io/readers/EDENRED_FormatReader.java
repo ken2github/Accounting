@@ -1,6 +1,7 @@
 package store.io.readers;
 
 import java.io.File;
+import java.io.InputStream;
 import java.util.Vector;
 
 import store.io.FormatReader;
@@ -23,6 +24,12 @@ public class EDENRED_FormatReader implements FormatReader {
 	public long getBalance(int month) {
 		// TODO Auto-generated method stub
 		return 0;
+	}
+
+	@Override
+	public void loadInputStream(InputStream is, String fileName) throws Exception {
+		// TODO Auto-generated method stub
+
 	}
 
 }

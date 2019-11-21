@@ -29,9 +29,11 @@ public class YearBookTest {
 		assertEquals(2018,y.getYear());
 		assertNotNull(y.getSchema());
 		assertEquals(1,y.getSchema().getCounts().size());
-		assertEquals(2,y.getSchema().getSectors().size());
+		assertEquals(2+2,y.getSchema().getSectors().size());
 		assertEquals("sps",y.getSchema().getSectors().get(0));
 		assertEquals("sps.cibo",y.getSchema().getSectors().get(1));
+		assertEquals("sps.rimborsi",y.getSchema().getSectors().get(2));
+		assertEquals("sps.extra",y.getSchema().getSectors().get(3));
 		assertEquals(1,y.getSchema().getSuperSectors().size());
 		assertEquals("BPN",y.getSchema().getCounts().get(0));
 		assertEquals(1,y.getMonthBooks().size());

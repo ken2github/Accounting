@@ -10,6 +10,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 import checking.CheckException;
 import checking.CheckingEngine;
@@ -30,14 +31,14 @@ public class ReportingController {
 	@Autowired
 	private CheckingEngine ce;
 		
-	@RequestMapping("/years/{year}/status")	
+	@RequestMapping(method = RequestMethod.GET,value="/years/{year}/status")	
 	public String method(@PathVariable(required=true) String year) throws Exception {		
 		YearBook yb = mb.getYearBooks().stream().filter(y -> (y.getYear()==(Integer.parseInt(year)))).findFirst().get();	
 		ExecutionStatus status = ce.execute(yb);				
 		return status.name();
 	}
 	
-	@RequestMapping("/years/{year}/errors")	
+	@RequestMapping(method = RequestMethod.GET,value="/years/{year}/errors")	
 	public List<Map<String, List<String>>>  method2(@PathVariable(required=true) String year) throws Exception {		
 		List<Map<String, List<String>>> result = new ArrayList<>();
 		YearBook yb = mb.getYearBooks().stream().filter(y -> (y.getYear()==(Integer.parseInt(year)))).findFirst().get();	

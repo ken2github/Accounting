@@ -16,6 +16,9 @@ public class Schema {
 	public static final String SECTOR_DELIMITER = ".";
 	public static final String SECTOR_DELIMITER_REGEXP = "[.]";
 	
+	public static final String RIMBORSI_SECTOR_SUFFIX = "rimborsi";
+	public static final String EXTRA_SECTOR_SUFFIX = "extra";
+	
 	private Vector<String> counts = new Vector<>();
 	private Map<String,Long> initialBalances = new HashMap<>();
 	private Vector<String> sectors = new Vector<>();
@@ -41,6 +44,11 @@ public class Schema {
 			if(!superSectors.contains(supersector)) {
 				superSectors.add(supersector);
 			}
+		}
+		
+		for (String superSector : this.superSectors) {
+			sectors.add(superSector+SECTOR_DELIMITER+RIMBORSI_SECTOR_SUFFIX);
+			sectors.add(superSector+SECTOR_DELIMITER+EXTRA_SECTOR_SUFFIX);
 		}
 		
 	}

@@ -45,7 +45,7 @@ public class IndexesTest {
 			int categories = yb.getSchema().getSuperSectors().size();
 			assertEquals(1, categories);
 			int subcategories = yb.getSchema().getSectors().size();
-			assertEquals(2, subcategories);
+			assertEquals(2+2, subcategories);
 			int commons = 2;
 			int flows = 2;
 			
