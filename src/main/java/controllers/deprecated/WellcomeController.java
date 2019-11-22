@@ -240,7 +240,8 @@ public class WellcomeController {
 	public String stagedTransactions(Map<String, Object> model) {
 		System.out.println("Edit inside Controller");
 
-		List<DetailedSector> sectors = sAPI.findAll();
+		List<DetailedSector> sectors = sAPI.findAll().stream()
+				.sorted((ds1, ds2) -> ds1.getName().compareTo(ds2.getName())).collect(Collectors.toList());
 		model.put("sectors", sectors);
 
 		List<DetailedTransaction> stagedTransactions = stAPI.findAll();
@@ -255,7 +256,8 @@ public class WellcomeController {
 			System.out.println("Edit inside");
 		}
 
-		List<DetailedSector> sectors = sAPI.findAll();
+		List<DetailedSector> sectors = sAPI.findAll().stream()
+				.sorted((ds1, ds2) -> ds1.getName().compareTo(ds2.getName())).collect(Collectors.toList());
 		model.put("sectors", sectors);
 
 		List<DetailedTransaction> stagedTransactions = stAPI.findAll();
@@ -268,7 +270,8 @@ public class WellcomeController {
 	public String viewStagedTransaction(Map<String, Object> model,
 			@PathVariable("transactionId") final String transactionId) {
 
-		List<DetailedSector> sectors = sAPI.findAll();
+		List<DetailedSector> sectors = sAPI.findAll().stream()
+				.sorted((ds1, ds2) -> ds1.getName().compareTo(ds2.getName())).collect(Collectors.toList());
 		model.put("sectors", sectors);
 
 		DetailedTransaction stagedTransaction = stAPI.findById(transactionId);
@@ -282,7 +285,8 @@ public class WellcomeController {
 			@PathVariable("transactionId") final String transactionId, @RequestParam("save") String save,
 			@RequestParam("isCommon") String isCommon, @RequestParam("sectorName") String sectorName) {
 
-		List<DetailedSector> sectors = sAPI.findAll();
+		List<DetailedSector> sectors = sAPI.findAll().stream()
+				.sorted((ds1, ds2) -> ds1.getName().compareTo(ds2.getName())).collect(Collectors.toList());
 		model.put("sectors", sectors);
 
 		DetailedTransaction stagedTransaction = stAPI.findById(transactionId);
@@ -318,7 +322,8 @@ public class WellcomeController {
 			});
 		}
 
-		List<DetailedSector> sectors = sAPI.findAll();
+		List<DetailedSector> sectors = sAPI.findAll().stream()
+				.sorted((ds1, ds2) -> ds1.getName().compareTo(ds2.getName())).collect(Collectors.toList());
 		model.put("sectors", sectors);
 
 		stagedTransactions = stAPI.findAll();

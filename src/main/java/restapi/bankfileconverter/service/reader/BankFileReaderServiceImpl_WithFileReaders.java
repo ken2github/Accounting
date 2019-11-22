@@ -6,9 +6,11 @@ import java.io.FileInputStream;
 import java.math.BigDecimal;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Base64;
 import java.util.Date;
 import java.util.List;
+import java.util.function.BiFunction;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
@@ -43,7 +45,7 @@ public class BankFileReaderServiceImpl_WithFileReaders implements BankFileReader
 
 		// compute transactions
 		List<Transaction> transactions = readTransactionsFromBankFileReader(
-				getBankFileReaderFromFile(iifi.file, BankFile.getFileFormat(count)));
+				findBankFileReader(count, iifi.getFile(), this::getBankFileReaderFromFile));
 
 		// assign count to transactions
 		transactions.stream().forEach(t -> t.setCountName(count.name()));
@@ -52,12 +54,38 @@ public class BankFileReaderServiceImpl_WithFileReaders implements BankFileReader
 				.setTotalFlow(computeTotalFlow(transactions)).setTransactions(transactions);
 	}
 
+	private <T> BankFileReader findBankFileReader(Count count, T input,
+			BiFunction<T, BankFileFormat, BankFileReader> bankFileReaderGetter) {
+		List<BankFileFormat> formats = BankFile.getFileFormat(count);
+		List<String> errorMessages = new ArrayList<String>();
+		BankFileReader bfr = null;
+		for (BankFileFormat format : formats) {
+			try {
+				bfr = bankFileReaderGetter.apply(input, format);
+				if (bfr.isFileCompliantWithFormat()) {
+					errorMessages.add(String.format("Compliance with format '%s' is FAILED. Found uncompliances: %s.",
+							format.name(), bfr.foundComplianceIssues().stream().collect(Collectors.joining("; "))));
+					break;
+				}
+			} catch (RuntimeException re) {
+				errorMessages.add(String.format("Compliance with format '%s' is FAILED. Thrown exception: %s.",
+						format.name(), re.toString()));
+			}
+		}
+		if (bfr == null || !bfr.isFileCompliantWithFormat()) {
+			throw new RuntimeException(String.format("Impossible to find compliant BankFileReader (in %s). %s",
+					formats.stream().map(f -> f.name()).collect(Collectors.joining(", ")),
+					errorMessages.stream().collect(Collectors.joining(" "))));
+		}
+		return bfr;
+	}
+
 	@Override
 	public OutputFileInfo convertToTransactions(InputBase64FileInfo ifi) {
 		OutputFileInfo ofi = new OutputFileInfo();
 		// compute transactions
-		List<Transaction> transactions = readTransactionsFromBankFileReader(getBankFileReaderFromBase64EncodedString(
-				ifi.base64EncodedFileContent, BankFile.getFileFormat(ifi.count)));
+		List<Transaction> transactions = readTransactionsFromBankFileReader(findBankFileReader(ifi.count,
+				ifi.base64EncodedFileContent, this::getBankFileReaderFromBase64EncodedString));
 
 		// List<Transaction> transactions =
 		// readTransactionsFromBase64EncodedString(ifi.base64EncodedFileContent,
@@ -85,8 +113,8 @@ public class BankFileReaderServiceImpl_WithFileReaders implements BankFileReader
 		BigDecimal balance = valueOfBalance(m.group(FileNamePatternConstants.BALANCE));
 
 		// compute transactions
-		List<Transaction> transactions = readTransactionsFromBankFileReader(
-				getBankFileReaderFromBase64EncodedString(iifi.base64EncodedFileContent, BankFile.getFileFormat(count)));
+		List<Transaction> transactions = readTransactionsFromBankFileReader(findBankFileReader(count,
+				iifi.base64EncodedFileContent, this::getBankFileReaderFromBase64EncodedString));
 
 		return ofi.setCount(count).setFromDate(fromDate).setToDate(toDate).setToDateBalance(balance)
 				.setTotalFlow(computeTotalFlow(transactions)).setTransactions(transactions);
@@ -149,8 +177,8 @@ public class BankFileReaderServiceImpl_WithFileReaders implements BankFileReader
 	}
 
 	private BankFileReader getBankFileReaderFromFile(File file, BankFileFormat fileFormat) {
-		try {
-			return BankFile.getReader(fileFormat, new FileInputStream(file));
+		try (FileInputStream fis = new FileInputStream(file)) {
+			return BankFile.getReader(fileFormat, fis);
 		} catch (Exception e) {
 			throw new ReaderException(new BankFileError(BankFileErrorCode.ILLEGAL_BASE_64_ENCODING,
 					"Not valid base64 encoding of file. Exception: " + e.toString() + " : " + e.getMessage()));

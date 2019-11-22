@@ -1,8 +1,13 @@
 package restapi.bankfileconverter.service.reader;
 
 import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.Reader;
+import java.util.Arrays;
+import java.util.List;
 
 import restapi.bankfileconverter.api.Count;
+import restapi.bankfileconverter.service.reader.csv.Edenred_2_0_CSV_Reader;
 import restapi.bankfileconverter.service.reader.xls.BNP_1_0_XLS_Reader;
 import restapi.bankfileconverter.service.reader.xls.BPN_1_0_XLS_Reader;
 import restapi.bankfileconverter.service.reader.xls.Edenred_1_0_XLS_Reader;
@@ -22,6 +27,8 @@ public class BankFile {
 			return new YOUCARD_1_0_XLS_Reader(is);
 		case EDENRED_1_0:
 			return new Edenred_1_0_XLS_Reader(is);
+		case EDENRED_2_0:
+			return new Edenred_2_0_CSV_Reader((Reader) new InputStreamReader(is));
 		case INTERNAL_1_0:
 			return new Internal_1_0_XLS_Reader(is);
 		case SPESE_1_0:
@@ -31,26 +38,26 @@ public class BankFile {
 		throw new RuntimeException("NOT_IMPLEMENTED");
 	}
 
-	public static BankFileFormat getFileFormat(Count count) {
+	public static List<BankFileFormat> getFileFormat(Count count) {
 		switch (count) {
 		case BNP:
 		case LDD:
 		case LA:
 		case PEL:
-			return BankFileFormat.BNP_1_0;
+			return Arrays.asList(BankFileFormat.BNP_1_0);
 		case BPN:
-			return BankFileFormat.BPN_1_0;
+			return Arrays.asList(BankFileFormat.BPN_1_0);
 		case YOUCARD:
-			return BankFileFormat.YOUCARD_1_0;
+			return Arrays.asList(BankFileFormat.YOUCARD_1_0);
 		case EDENRED:
-			return BankFileFormat.EDENRED_1_0;
+			return Arrays.asList(BankFileFormat.EDENRED_1_0, BankFileFormat.EDENRED_2_0);
 		case TKTRESTO:
 		case ASSMUL:
 		case HOLD:
 		case FRANCA:
-			return BankFileFormat.INTERNAL_1_0;
+			return Arrays.asList(BankFileFormat.INTERNAL_1_0);
 		case MONEY:
-			return BankFileFormat.SPESE_1_0;
+			return Arrays.asList(BankFileFormat.SPESE_1_0);
 		default:
 			throw new RuntimeException("NOT_IMPLEMENTED");
 		}
