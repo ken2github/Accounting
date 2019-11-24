@@ -10,25 +10,25 @@ import org.junit.Test;
 
 import com.google.common.reflect.ClassPath;
 
-import indexes.*;
-import indexes.averages.AVERAGE_YEAR_CATEGORY_FLOW;
-import indexes.averages.AVERAGE_YEAR_CATEGORY_SUBCATEGORY;
-import indexes.nets.YEAR;
-import indexes.nets.YEAR_MONTH;
-import indexes.nets.YEAR_MONTH_CATEGORY;
-import indexes.nets.YEAR_MONTH_CATEGORY_COMMON_FLOW;
-import indexes.nets.YEAR_MONTH_CATEGORY_FLOW;
-import indexes.nets.YEAR_MONTH_CATEGORY_SUBCATEGORY;
-import indexes.nets.YEAR_MONTH_CATEGORY_SUBCATEGORY_COMMON_FLOW;
-import indexes.nets.YEAR_MONTH_CATEGORY_SUBCATEGORY_FLOW;
-import indexes.nets.YEAR_MONTH_COMMON;
-import indexes.nets.YEAR_MONTH_COMMON_FLOW;
-import indexes.nets.YEAR_MONTH_COUNT;
-import indexes.nets.YEAR_MONTH_COUNT_CATEGORY_SUBCATEGORY_COMMON;
-import indexes.nets.YEAR_MONTH_COUNT_CATEGORY_SUBCATEGORY_COMMON_FLOW;
-import indexes.nets.YEAR_MONTH_COUNT_FLOW;
-import indexes.nets.YEAR_MONTH_FLOW;
-import model.books.YearBook;
+import deprecated.indexes.*;
+import deprecated.indexes.averages.AVERAGE_YEAR_CATEGORY_FLOW;
+import deprecated.indexes.averages.AVERAGE_YEAR_CATEGORY_SUBCATEGORY;
+import deprecated.indexes.nets.YEAR;
+import deprecated.indexes.nets.YEAR_MONTH;
+import deprecated.indexes.nets.YEAR_MONTH_CATEGORY;
+import deprecated.indexes.nets.YEAR_MONTH_CATEGORY_COMMON_FLOW;
+import deprecated.indexes.nets.YEAR_MONTH_CATEGORY_FLOW;
+import deprecated.indexes.nets.YEAR_MONTH_CATEGORY_SUBCATEGORY;
+import deprecated.indexes.nets.YEAR_MONTH_CATEGORY_SUBCATEGORY_COMMON_FLOW;
+import deprecated.indexes.nets.YEAR_MONTH_CATEGORY_SUBCATEGORY_FLOW;
+import deprecated.indexes.nets.YEAR_MONTH_COMMON;
+import deprecated.indexes.nets.YEAR_MONTH_COMMON_FLOW;
+import deprecated.indexes.nets.YEAR_MONTH_COUNT;
+import deprecated.indexes.nets.YEAR_MONTH_COUNT_CATEGORY_SUBCATEGORY_COMMON;
+import deprecated.indexes.nets.YEAR_MONTH_COUNT_CATEGORY_SUBCATEGORY_COMMON_FLOW;
+import deprecated.indexes.nets.YEAR_MONTH_COUNT_FLOW;
+import deprecated.indexes.nets.YEAR_MONTH_FLOW;
+import deprecated.model.books.YearBook;
 import test.TestPath;
 
 public class IndexesTest {

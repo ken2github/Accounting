@@ -3,8 +3,8 @@ package test.on.data00;
 import static org.junit.Assert.fail;
 import org.junit.Test;
 
-import model.books.CountMonthTransactions;
-import model.schema.Transaction;
+import deprecated.model.books.CountMonthTransactions;
+import deprecated.model.schema.Transaction;
 
 import static org.junit.Assert.assertEquals;
 

@@ -4,8 +4,8 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.fail;
 import org.junit.Test;
 
-import model.books.MonthBook;
-import model.books.YearBook;
+import deprecated.model.books.MonthBook;
+import deprecated.model.books.YearBook;
 
 import java.io.File;
 

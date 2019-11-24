@@ -6,7 +6,7 @@ import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 import org.junit.Test;
 
-import model.schema.Transaction;
+import deprecated.model.schema.Transaction;
 
 import static org.junit.Assert.assertEquals;
 

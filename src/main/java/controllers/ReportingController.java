@@ -12,12 +12,13 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
-import checking.CheckException;
-import checking.CheckingEngine;
-import checking.ExecutionStatus;
-import checking.RuleGroup;
-import model.books.MasterBook;
-import model.books.YearBook;
+
+import deprecated.checking.CheckException;
+import deprecated.checking.CheckingEngine;
+import deprecated.checking.ExecutionStatus;
+import deprecated.checking.RuleGroup;
+import deprecated.model.books.MasterBook;
+import deprecated.model.books.YearBook;
 
 @RestController
 @RequestMapping("/reports/checking")

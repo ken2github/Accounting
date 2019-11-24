@@ -2,12 +2,14 @@ package test.on.data01;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 import org.junit.Test;
+
+import deprecated.store.io.FormatMapper;
+import deprecated.store.io.FormatReader;
+import deprectaed.store.io.readers.EdenredValidator;
+import deprectaed.store.io.readers.Parametric_FormatReader;
+
 import java.io.File;
 
-import store.io.FormatMapper;
-import store.io.FormatReader;
-import store.io.readers.EdenredValidator;
-import store.io.readers.Parametric_FormatReader;
 import test.TestPath;
 
 public class EDE_FormatReaderTest {

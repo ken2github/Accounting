@@ -2,12 +2,14 @@ package test.on.data01;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
 import org.junit.Test;
+
+import deprecated.store.io.Normalizer;
+
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import store.io.Normalizer;
 import test.TestPath;
 
 public class NormalizerTest {

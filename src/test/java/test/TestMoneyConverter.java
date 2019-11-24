@@ -6,7 +6,7 @@ import java.text.DecimalFormat;
 
 import org.junit.Test;
 
-import utils.MoneyConverter;
+import deprecated.utils.MoneyConverter;
 
 public class TestMoneyConverter {
 

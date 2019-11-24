@@ -2,8 +2,8 @@ package test.on.data00;
 import static org.junit.Assert.fail;
 import org.junit.Test;
 
-import model.books.CountMonthTransactions;
-import model.books.MonthBook;
+import deprecated.model.books.CountMonthTransactions;
+import deprecated.model.books.MonthBook;
 
 import java.io.File;
 import static org.junit.Assert.assertEquals;

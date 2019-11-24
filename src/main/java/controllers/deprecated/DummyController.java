@@ -7,8 +7,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import indexes.nets.YEAR;
-import model.books.MasterBook;
+import deprecated.indexes.nets.YEAR;
+import deprecated.model.books.MasterBook;
 
 @RestController
 public class DummyController {

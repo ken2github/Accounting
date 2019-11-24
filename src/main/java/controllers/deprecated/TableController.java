@@ -18,12 +18,12 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.servlet.HandlerMapping;
 
+import deprecated.model.books.MasterBook;
+import deprecated.reporting.Reportable;
+import deprecated.reporting.VelocityReporter;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
-import model.books.MasterBook;
-import reporting.Reportable;
-import reporting.VelocityReporter;
 
 @RestController
 @RequestMapping("/reports/tables/indexes/{index}/")

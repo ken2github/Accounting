@@ -17,8 +17,9 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.HandlerMapping;
-import model.books.MasterBook;
-import model.books.YearBook;
+
+import deprecated.model.books.MasterBook;
+import deprecated.model.books.YearBook;
 
 @RestController
 @RequestMapping("/indexes/{index}/")

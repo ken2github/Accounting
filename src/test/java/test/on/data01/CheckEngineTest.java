@@ -17,11 +17,11 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.powermock.modules.junit4.PowerMockRunner;
 
-import checking.CheckException;
-import checking.CheckingEngine;
-import checking.ExecutionStatus;
-import checking.RuleGroup;
-import model.books.YearBook;
+import deprecated.checking.CheckException;
+import deprecated.checking.CheckingEngine;
+import deprecated.checking.ExecutionStatus;
+import deprecated.checking.RuleGroup;
+import deprecated.model.books.YearBook;
 import test.TestPath;
 
 @RunWith(PowerMockRunner.class)

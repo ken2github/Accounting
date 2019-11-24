@@ -2,8 +2,8 @@ package test.on.data00;
 import static org.junit.Assert.fail;
 import org.junit.Test;
 
-import model.books.MasterBook;
-import model.books.YearBook;
+import deprecated.model.books.MasterBook;
+import deprecated.model.books.YearBook;
 
 import static org.junit.Assert.assertEquals;
 

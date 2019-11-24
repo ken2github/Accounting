@@ -19,12 +19,12 @@ import controllers.exceptionhandler.ApiException;
 import dao.DAOException;
 import dao.DBError;
 import dao.DBError.DBErrorCode;
+import deprecated.store.io.FormatMapper;
+import deprecated.store.io.FormatReader;
+import deprecated.store.io.UnmappedFormatReaderException;
+import deprectaed.store.io.readers.NotValidMonthException;
 import dao.ReadOnlyTransactionList;
 import model2.Transaction;
-import store.io.FormatMapper;
-import store.io.FormatReader;
-import store.io.UnmappedFormatReaderException;
-import store.io.readers.NotValidMonthException;
 
 public class FileReadyOnlyTransactionList implements ReadOnlyTransactionList {
 

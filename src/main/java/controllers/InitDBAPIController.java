@@ -1,5 +1,6 @@
 package controllers;
 
+import static deprecated.store.io.Format.RAW_SEPARATOR_REGEXP;
 import static restapi.bankfileconverter.api.Count.ASSMUL;
 import static restapi.bankfileconverter.api.Count.BNP;
 import static restapi.bankfileconverter.api.Count.BPN;
@@ -12,7 +13,6 @@ import static restapi.bankfileconverter.api.Count.MONEY;
 import static restapi.bankfileconverter.api.Count.PEL;
 import static restapi.bankfileconverter.api.Count.TKTRESTO;
 import static restapi.bankfileconverter.api.Count.YOUCARD;
-import static store.io.Format.RAW_SEPARATOR_REGEXP;
 
 import java.io.IOException;
 import java.math.BigDecimal;

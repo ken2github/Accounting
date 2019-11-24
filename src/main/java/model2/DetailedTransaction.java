@@ -19,48 +19,54 @@ public class DetailedTransaction extends Transaction {
 		return id;
 	}
 
-	public void setId(String id) {
+	public DetailedTransaction setId(String id) {
 		this.id = id;
+		return this;
 	}
 
 	public String getIdCount() {
 		return idCount;
 	}
 
-	public void setIdCount(String idCount) {
+	public DetailedTransaction setIdCount(String idCount) {
 		this.idCount = idCount;
+		return this;
 	}
 
 	public String getIdSector() {
 		return idSector;
 	}
 
-	public void setIdSector(String idSector) {
+	public DetailedTransaction setIdSector(String idSector) {
 		this.idSector = idSector;
+		return this;
 	}
 
 	public boolean isAutomatic() {
 		return isAutomatic;
 	}
 
-	public void setAutomatic(boolean isAutomatic) {
+	public DetailedTransaction setAutomatic(boolean isAutomatic) {
 		this.isAutomatic = isAutomatic;
+		return this;
 	}
 
 	public boolean isDeprecated() {
 		return isDeprecated;
 	}
 
-	public void setDeprecated(boolean isDeprecated) {
+	public DetailedTransaction setDeprecated(boolean isDeprecated) {
 		this.isDeprecated = isDeprecated;
+		return this;
 	}
 
 	public List<String> getIsDeprecatedBy() {
 		return isDeprecatedBy;
 	}
 
-	public void setIsDeprecatedBy(List<String> isDeprecatedBy) {
+	public DetailedTransaction setIsDeprecatedBy(List<String> isDeprecatedBy) {
 		this.isDeprecatedBy = isDeprecatedBy;
+		return this;
 	}
 
 }

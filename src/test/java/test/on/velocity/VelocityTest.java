@@ -4,9 +4,9 @@ import static org.junit.Assert.*;
 import java.io.File;
 import org.junit.Test;
 
-import reporting.ReportException;
-import reporting.Reportable;
-import reporting.VelocityReporter;
+import deprecated.reporting.ReportException;
+import deprecated.reporting.Reportable;
+import deprecated.reporting.VelocityReporter;
 
 public class VelocityTest {
 

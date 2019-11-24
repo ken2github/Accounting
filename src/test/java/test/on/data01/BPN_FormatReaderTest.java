@@ -2,12 +2,14 @@ package test.on.data01;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 import org.junit.Test;
+
+import deprecated.store.io.FormatMapper;
+import deprecated.store.io.FormatReader;
+import deprecated.store.io.TransactionFilterException;
+import deprectaed.store.io.readers.Parametric_FormatReader;
+
 import java.io.File;
 
-import store.io.FormatMapper;
-import store.io.FormatReader;
-import store.io.TransactionFilterException;
-import store.io.readers.Parametric_FormatReader;
 import test.TestPath;
 
 public class BPN_FormatReaderTest {
