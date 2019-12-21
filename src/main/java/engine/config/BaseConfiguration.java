@@ -14,7 +14,8 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 @Configuration
 @EnableSwagger2
 @PropertySource("classpath:application.properties")
-@ComponentScan(basePackages = { "controllers", "model", "checking", "engine", "dao", "dao.jdbc" })
+@ComponentScan(basePackages = { "controllers", "deprecated.controllers", "deprecated.model", "model",
+		"deprecated.checking", "checking", "engine", "dao", "dao.jdbc" })
 public class BaseConfiguration {
 	@Bean
 	public Docket api() {

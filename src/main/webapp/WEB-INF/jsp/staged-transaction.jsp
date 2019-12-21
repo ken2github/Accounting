@@ -1,3 +1,9 @@
+<%@page import="restapi.bankprovisioninghelper.api.Relevance"%>
+<%@page import="java.util.Arrays"%>
+<%@page import="java.util.stream.IntStream"%>
+<%@page import="dao.AccountedYearDAO"%>
+<%@page import="restapi.bankprovisioninghelper.service.BankTransactionAnalytics"%>
+<%@page import="dao.TransactionDAO"%>
 <%@page import="java.text.DecimalFormat"%>
 <%@page import="java.text.SimpleDateFormat"%>
 <%@page import="java.util.stream.Collectors"%>
@@ -40,6 +46,10 @@
    	List<DetailedTransaction> transactions = stdao.findAll();  
 	transactions=transactions.stream().sorted((dt1,dt2)->dt1.getDate().compareTo(dt2.getDate())).collect(Collectors.toList());
    	
+	AccountedYearDAO aydao = (AccountedYearDAO) aC.getBean("accountedYearDAO");
+	TransactionDAO tdao = (TransactionDAO) aC.getBean("transactionDAO");
+	BankTransactionAnalytics bta = (BankTransactionAnalytics) aC.getBean("bankTransactionAnalytics");
+		
 	DecimalFormat df = new DecimalFormat("#,###.00");
 	
 	boolean isLast = true;
@@ -65,7 +75,7 @@
 		   String tdclassGreen=tdclass+"green";
 		   %>
 <form enctype="multipart/form-data" method="post" action="/balancing/staged-transactions/save/<%= dt.getId()%>">
-<table class="tg">
+<table width="100%" class="tg">
   <tr>
     <th class="tg-iu63">Count<br></th>
     <th class="tg-iu63">Date</th>
@@ -73,7 +83,7 @@
     <th class="tg-iu63">Title</th>
     <th class="tg-iu63">Is Common</th>
     <th class="tg-iu63">Sector</th>
-    <th class="tg-iu63">Action</th>
+    <th width="200" class="tg-iu63">Action</th>
   </tr>
 		   <tr>
 		    <td class="<%= tdclass%>"><%= dt.getCountName()%></td>
@@ -107,8 +117,31 @@
 		    		%>
 		    		<td class="<%= (tdclass+"red")%>">
 		    		<select id="sectorName" name="sectorName"> 
-		    			<option value="" selected="selected"></option>
 		    			<%
+		    			List<String> suggestedSectors = bta.suggestSectorsForTransaction(dt, 3, Relevance.MEDIUM);
+		    			String suggestedWithHighRelevance="";
+		    			if(suggestedSectors!=null && suggestedSectors.size()>0){
+		    				suggestedWithHighRelevance=suggestedSectors.get(0);
+		    			}
+		    			System.out.println("suggestedIs="+suggestedWithHighRelevance);
+		    			%>		    			
+		    			<option value="<%=suggestedWithHighRelevance%>" selected="selected"><%=suggestedWithHighRelevance%></option>
+		    			<%
+		    			suggestedSectors = bta.suggestSectorsForTransaction(dt, 3, Relevance.VERY_LOW);
+		    			if(suggestedSectors!=null){
+		    				if(!suggestedWithHighRelevance.equals("")){
+		    					suggestedSectors=suggestedSectors.subList(1, suggestedSectors.size());
+	    					}
+		    				for(String ss :suggestedSectors){
+		    					
+		    				%>
+		    					<option value="<%= ss%>" ><%= ss%></option>
+		    				<%
+		    				};
+		    			}
+		    			%>
+    					<option value="" >-------</option>
+    				    <%
 		    			if(sectors!=null){
 		    				for(DetailedSector ds :sectors){
 		    				%>
@@ -126,6 +159,17 @@
 		    		<select id="sectorName" name="sectorName"> 
 		    			<option value="<%= dt.getSectorName()%>" selected="selected"></option>
 		    			<%
+		    			List<String> suggestedSectors = bta.suggestSectorsForTransaction(dt, 3, Relevance.LOWEST);
+		    			if(suggestedSectors!=null){
+		    				for(String ss :suggestedSectors){
+		    				%>
+		    					<option value="<%= ss%>" ><%= ss%></option>
+		    				<%
+		    				};
+		    			}
+		    			%>
+    					<option value="" >-------</option>
+    				    <%
 		    			if(sectors!=null){
 		    				for(DetailedSector ds :sectors){
 		    				%>

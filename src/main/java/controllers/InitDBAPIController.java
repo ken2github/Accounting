@@ -166,6 +166,9 @@ public class InitDBAPIController {
 
 			sectors.put("MTR-Money transfer", Arrays.asList());
 
+			sectors.put("XXX-Non riconosciute", Arrays.asList("FAKE-transazione fake aggiunta per varianza calcoli",
+					"MISSINGINFO-mancanza storico per categorizzare"));
+
 			sectors.keySet().stream().forEach(superSector -> {
 				String[] superSectorItems = superSector.split("-");
 				String superSectorName = superSectorItems[0];

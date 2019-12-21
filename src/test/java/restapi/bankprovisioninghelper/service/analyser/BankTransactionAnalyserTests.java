@@ -49,7 +49,7 @@ public class BankTransactionAnalyserTests {
 				.setTitle("pagamento internet - carta*5842-15:36-mgp*leetchi.com0355938 paris fra")
 				.setSectorName("REG"));
 
-		bta.initTokensMap(transactions);
+		bta.refreshTokensMap(transactions);
 	}
 
 	@Test

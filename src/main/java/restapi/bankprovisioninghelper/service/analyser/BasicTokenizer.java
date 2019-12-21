@@ -9,7 +9,7 @@ import restapi.bankprovisioninghelper.api.Tokenizer;
 public class BasicTokenizer implements Tokenizer {
 
 	private static String SEPARATOR = "<s>";
-	private static String NON_WORD_REGEXP = "( - )|( e )|( : )|(, )|([\\d]{2,4}[-.\\/]{1}[\\d]{2,4}([-\\/]{1}[\\d]{2,4})?)([:][\\d]{2,4})?|(\\s)";
+	private static String NON_WORD_REGEXP = "( - )|( e )|( : )|(, )|(\\[)|(\\])|([\\d]{2,4}[-.\\/]{1}[\\d]{2,4}([-\\/]{1}[\\d]{2,4})?)([:][\\d]{2,4})?|(\\s)";
 
 	@Override
 	public List<String> tokenize(String text) {

@@ -26,6 +26,7 @@ import model2.DetailedTransaction;
 import model2.Metric;
 import model2.Transaction;
 import restapi.bankfileconverter.api.OutputFileInfo;
+import restapi.bankprovisioninghelper.service.BankTransactionAnalytics;
 
 @Controller
 @RequestMapping("/balancing")
@@ -51,6 +52,9 @@ public class WellcomeController {
 
 	@Autowired
 	private BalancesIndexAPIController biAPI;
+
+	@Autowired
+	private BankTransactionAnalytics bta;
 
 	@RequestMapping("/home")
 	public String home(Map<String, Object> model) {
@@ -101,9 +105,13 @@ public class WellcomeController {
 
 			System.out.println("old balance=" + oldSaldo);
 
-			if (sumAll.subtract(sumDoubled).add(oldSaldo).compareTo(newSaldo) != 0) {
+			BigDecimal expectedNewSaldo = sumAll.subtract(sumDoubled).add(oldSaldo);
+			BigDecimal delta = expectedNewSaldo.subtract(newSaldo);
+			if (delta.compareTo(new BigDecimal(0)) != 0) {
 				// Incoerenza
-				throw new RuntimeException("Saldo non coerente");
+				throw new RuntimeException(String.format(
+						"Saldo non coerente: oldSalso=%s + transactions=%s - duplicatedTransactions=%s gives an expectedNewSaldo=%s that should be equal to realNewSaldo=%s but there is a delta=%s.",
+						oldSaldo, sumAll, sumDoubled, expectedNewSaldo, newSaldo, delta));
 			}
 
 			// add transactions to staged-transactions
