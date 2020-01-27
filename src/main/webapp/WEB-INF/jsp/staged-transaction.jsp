@@ -1,8 +1,10 @@
-<%@page import="restapi.bankprovisioninghelper.api.Relevance"%>
+<%@page import="java.util.Optional"%>
+<%@page import="java.util.Map"%>
+<%@page import="restapi.transactionsoracle.api.SimilarityRelevance"%>
 <%@page import="java.util.Arrays"%>
 <%@page import="java.util.stream.IntStream"%>
 <%@page import="dao.AccountedYearDAO"%>
-<%@page import="restapi.bankprovisioninghelper.service.BankTransactionAnalytics"%>
+<%@page import="restapi.transactionsoracle.service.TransactionsOracle"%>
 <%@page import="dao.TransactionDAO"%>
 <%@page import="java.text.DecimalFormat"%>
 <%@page import="java.text.SimpleDateFormat"%>
@@ -22,9 +24,20 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-<title>Insert title here</title>
+<title>Stage Area</title>
 </head>
 <body>
+<%
+	String indexMenuHTML = "";
+	String indexMenuItem = "<a href=\"%s\">%s</a>&nbsp;&nbsp;";
+	List<String> indexMenu = (List<String>) pageContext.findAttribute("indexMenu");
+	for(String item : indexMenu){
+		String[] values = item.split("[!]");
+		indexMenuHTML += String.format(indexMenuItem, values[1],values[0]) ;
+	}
+%>
+<%=indexMenuHTML%>
+<p/>
 <style type="text/css">
 .tg  {border-collapse:collapse;border-spacing:0;}
 .tg td{font-family:Arial, sans-serif;font-size:14px;padding:10px 5px;border-style:solid;border-width:1px;overflow:hidden;word-break:normal;border-color:black;}
@@ -37,7 +50,7 @@
 .tg .tg-r0kqgreen{font-family:Verdana, Geneva, sans-serif !important;;background-color:#c8fbb6;border-color:inherit;text-align:left;vertical-align:top}
 </style>
 <%
-   WebApplicationContext aC = RequestContextUtils.findWebApplicationContext(request);
+	WebApplicationContext aC = RequestContextUtils.findWebApplicationContext(request);
    StagedTransactionDAO stdao = (StagedTransactionDAO) aC.getBean("stagedTransactionDAO");
    
    List<DetailedSector> sectors = (List<DetailedSector>) pageContext.findAttribute("sectors");
@@ -48,9 +61,9 @@
    	
 	AccountedYearDAO aydao = (AccountedYearDAO) aC.getBean("accountedYearDAO");
 	TransactionDAO tdao = (TransactionDAO) aC.getBean("transactionDAO");
-	BankTransactionAnalytics bta = (BankTransactionAnalytics) aC.getBean("bankTransactionAnalytics");
+	TransactionsOracle bta = (TransactionsOracle) aC.getBean("transactionOracle");
 		
-	DecimalFormat df = new DecimalFormat("#,###.00");
+	DecimalFormat df = new DecimalFormat("####.00");
 	
 	boolean isLast = true;
 	boolean isFirst = true;
@@ -58,14 +71,14 @@
 	String previousTrnsactionId = null;
 	for(int i=0; i<transactions.size(); i++){
 		if(transactions.get(i).getId().equals(dt.getId())){
-			if(i<transactions.size()-2){
-				isLast = false;
-				nextTrnsactionId = transactions.get(i+1).getId();
-			}
-			if(i>0){
-				isFirst = false;
-				previousTrnsactionId = transactions.get(i-1).getId();
-			}
+	if(i<transactions.size()-2){
+		isLast = false;
+		nextTrnsactionId = transactions.get(i+1).getId();
+	}
+	if(i>0){
+		isFirst = false;
+		previousTrnsactionId = transactions.get(i-1).getId();
+	}
 		}
 	}
 	
@@ -73,8 +86,8 @@
 		   String tdclass="tg-r0kq";
 		   String tdclassRed=tdclass+"red";
 		   String tdclassGreen=tdclass+"green";
-		   %>
-<form enctype="multipart/form-data" method="post" action="/balancing/staged-transactions/save/<%= dt.getId()%>">
+%>
+<form enctype="multipart/form-data" method="post" action="/balancing/staged-transactions/save/<%=dt.getId()%>">
 <table width="100%" class="tg">
   <tr>
     <th class="tg-iu63">Count<br></th>
@@ -86,83 +99,110 @@
     <th width="200" class="tg-iu63">Action</th>
   </tr>
 		   <tr>
-		    <td class="<%= tdclass%>"><%= dt.getCountName()%></td>
-		    <td class="<%= tdclass%>"><%= sdf.format(dt.getDate())%></td>
-		    <td  class="<%=(dt.getAmount().signum() <= 0)?tdclassRed:tdclassGreen%>"><%= df.format(dt.getAmount()).toString() %></td>
-		    <td class="<%= tdclass%>"><%= dt.getTitle()%></td>
-		    <% 
+		    <td class="<%=tdclass%>"><%=dt.getCountName()%></td>
+		    <td class="<%=tdclass%>"><%=sdf.format(dt.getDate())%></td>
+		    <td  class="<%=(dt.getAmount().signum() <= 0)?tdclassRed:tdclassGreen%>" align="right"><%=df.format(dt.getAmount()).toString()%></td>
+		    <td class="<%=tdclass%>"><%=dt.getTitle()%></td>
+		    <%
 		    	if(dt.isCommon()==null){
-		    		%>
-		    		<td class="<%= (tdclass+"red")%>">
-		    		<select id="isCommon" name="isCommon"> 
-		    			<option value="" selected="selected"></option>
-		    			<option value="true" >Yes</option>
-		    			<option value="false" >No</option>
+		    %>
+		    		<td class="<%=(tdclass+"red")%>">
+		    		<select id="isCommon" name="isCommon"> 		    			
+		    			<%
+ 		    				Optional<Boolean> suggestedIsCommon = bta.suggestIsCommonForTransaction(dt, SimilarityRelevance.MEDIUM);
+ 		    				String suggestedWithHighRelevance="";
+ 		    				String suggestedWithHighRelevanceValue="";
+ 		    				if(suggestedIsCommon.isPresent()){
+ 		    					suggestedWithHighRelevance=suggestedIsCommon.get()?"Yes":"No";
+ 		    					suggestedWithHighRelevanceValue=suggestedIsCommon.get().toString();
+ 		    				}
+ 		    				System.out.println("suggestedIs="+suggestedWithHighRelevance);
+ 		    			%>		    			
+		    			<option value="<%=suggestedWithHighRelevanceValue%>" selected="selected"><%=suggestedWithHighRelevance%></option>
+		    			<%
+		    				suggestedIsCommon = bta.suggestIsCommonForTransaction(dt, SimilarityRelevance.VERY_LOW);
+		    				if(suggestedIsCommon.isPresent()){
+		    					%>
+		    					<option value="<%=suggestedIsCommon.get().toString()%>" ><%=suggestedIsCommon.get()?"Yes":"No"%></option>
+		    					<%		    					
+		    				}
+		    			%>
+    					<option value="" >-------</option>
+    					<option value="true" >Yes</option>
+		    			<option value="false" >No</option>	
 		    		</select>
-		    		<%		    		
-		    	}else{
+		    		<%
+		    			}else{
 		    		%>
-		    		<td class="<%= tdclass%>"><%= (dt.isCommon())?"Yes":"No"%>
+		    		<td class="<%=tdclass%>"><%=(dt.isCommon())?"Yes":"No"%>
 		    		<select id="isCommon" name="isCommon"> 
-		    			<option value="<%= (dt.isCommon())?"true":"false"%>" selected="selected"></option>
+		    			<option value="<%=(dt.isCommon())?"true":"false"%>" selected="selected"></option>		    			
+		    			<%
+		    				Optional<Boolean> suggestedIsCommon = bta.suggestIsCommonForTransaction(dt, SimilarityRelevance.VERY_LOW);
+		    				if(suggestedIsCommon.isPresent()){
+		    					%>
+		    					<option value="<%=suggestedIsCommon.get().toString()%>" ><%=suggestedIsCommon.get()?"Yes":"No"%></option>
+		    					<%		    					
+		    				}
+		    			%>
+		    			<option value="" >-------</option>
 		    			<option value="true" >Yes</option>
 		    			<option value="false" >No</option>
 		    		</select>		    		
 		    		<%
-		    	}
-		    %>
+		    				    			}
+		    				    		%>
 		    </td>
-		    <% 
+		    <%
 		    	if(dt.getSectorName()==null){
-		    		%>
-		    		<td class="<%= (tdclass+"red")%>">
+		    %>
+		    		<td class="<%=(tdclass+"red")%>">
 		    		<select id="sectorName" name="sectorName"> 
 		    			<%
-		    			List<String> suggestedSectors = bta.suggestSectorsForTransaction(dt, 3, Relevance.MEDIUM);
-		    			String suggestedWithHighRelevance="";
-		    			if(suggestedSectors!=null && suggestedSectors.size()>0){
-		    				suggestedWithHighRelevance=suggestedSectors.get(0);
-		    			}
-		    			System.out.println("suggestedIs="+suggestedWithHighRelevance);
-		    			%>		    			
+ 		    				List<String> suggestedSectors = bta.suggestSectorsForTransaction(dt, 3, SimilarityRelevance.MEDIUM);
+ 		    					    			String suggestedWithHighRelevance="";
+ 		    					    			if(suggestedSectors!=null && suggestedSectors.size()>0){
+ 		    					    				suggestedWithHighRelevance=suggestedSectors.get(0);
+ 		    					    			}
+ 		    					    			System.out.println("suggestedIs="+suggestedWithHighRelevance);
+ 		    			%>		    			
 		    			<option value="<%=suggestedWithHighRelevance%>" selected="selected"><%=suggestedWithHighRelevance%></option>
 		    			<%
-		    			suggestedSectors = bta.suggestSectorsForTransaction(dt, 3, Relevance.VERY_LOW);
-		    			if(suggestedSectors!=null){
-		    				if(!suggestedWithHighRelevance.equals("")){
-		    					suggestedSectors=suggestedSectors.subList(1, suggestedSectors.size());
-	    					}
-		    				for(String ss :suggestedSectors){
-		    					
-		    				%>
-		    					<option value="<%= ss%>" ><%= ss%></option>
-		    				<%
-		    				};
-		    			}
+		    				suggestedSectors = bta.suggestSectorsForTransaction(dt, 3, SimilarityRelevance.VERY_LOW);
+		    					    			if(suggestedSectors!=null){
+		    					    				if(!suggestedWithHighRelevance.equals("")){
+		    					    					suggestedSectors=suggestedSectors.subList(1, suggestedSectors.size());
+		    				    					}
+		    					    				for(String ss :suggestedSectors){
 		    			%>
+		    					<option value="<%=ss%>" ><%=ss%></option>
+		    				<%
+		    					};
+		    						    			}
+		    				%>
     					<option value="" >-------</option>
     				    <%
-		    			if(sectors!=null){
-		    				for(DetailedSector ds :sectors){
-		    				%>
-		    					<option value="<%= ds.getName()%>" ><%= ds.getName()%></option>
+    				    	if(sectors!=null){
+    				    		    				for(DetailedSector ds :sectors){
+    				    %>
+		    					<option value="<%=ds.getName()%>" ><%=ds.getName()%></option>
 		    				<%
-		    				};
-		    			}
-		    			%>
-		    		</select>
-		    		<%		    		
-		    	}else{
-		    		%>
-		    		<td class="<%= tdclass%>">
-		    		<%= dt.getSectorName()%>
-		    		<select id="sectorName" name="sectorName"> 
-		    			<option value="<%= dt.getSectorName()%>" selected="selected"></option>
-		    			<%
-		    			List<String> suggestedSectors = bta.suggestSectorsForTransaction(dt, 3, Relevance.LOWEST);
-		    			if(suggestedSectors!=null){
-		    				for(String ss :suggestedSectors){
+		    					};
+		    						    			}
 		    				%>
+		    		</select>
+		    		<%
+		    			}else{
+		    		%>
+		    		<td class="<%=tdclass%>">
+		    		<%=dt.getSectorName()%>
+		    		<select id="sectorName" name="sectorName"> 
+		    			<option value="<%=dt.getSectorName()%>" selected="selected"></option>
+		    			<%
+		    				List<String> suggestedSectors = bta.suggestSectorsForTransaction(dt, 3, SimilarityRelevance.LOWEST);
+		    					    			if(suggestedSectors!=null){
+		    					    				for(String ss :suggestedSectors){
+		    			%>
 		    					<option value="<%= ss%>" ><%= ss%></option>
 		    				<%
 		    				};
@@ -205,10 +245,13 @@ if(!isFirst){
 }
 %>
 <input id="save" name="save" type="hidden" value="save"> 
-<input id="saveForm" type="submit" name="submit" value="Save changes" />
+<input id="saveForm" type="submit" name="submit" value="Save" />
+<input id="next" name="next" type="hidden" value="<%= nextTrnsactionId%>">
 		<%
 if(!isLast){
 	%>
+	
+	<input id="saveForm" type="submit" name="submit" value="Save >>" />
 	<a href="/balancing/staged-transactions/edit/<%= nextTrnsactionId%>"><button type="button">&#62;&#62;</button></a>	
 	<%
 }

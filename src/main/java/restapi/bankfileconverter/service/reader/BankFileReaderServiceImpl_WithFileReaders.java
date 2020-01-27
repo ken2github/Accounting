@@ -66,6 +66,8 @@ public class BankFileReaderServiceImpl_WithFileReaders implements BankFileReader
 					errorMessages.add(String.format("Compliance with format '%s' is FAILED. Found uncompliances: %s.",
 							format.name(), bfr.foundComplianceIssues().stream().collect(Collectors.joining("; "))));
 					break;
+				} else {
+					System.out.println(bfr.foundComplianceIssues().stream().collect(Collectors.joining("; ")));
 				}
 			} catch (RuntimeException re) {
 				errorMessages.add(String.format("Compliance with format '%s' is FAILED. Thrown exception: %s.",
@@ -73,7 +75,7 @@ public class BankFileReaderServiceImpl_WithFileReaders implements BankFileReader
 			}
 		}
 		if (bfr == null || !bfr.isFileCompliantWithFormat()) {
-			throw new RuntimeException(String.format("Impossible to find compliant BankFileReader (in %s). %s",
+			throw new RuntimeException(String.format("Impossible to find compliant BankFileReader (in formats: %s). %s",
 					formats.stream().map(f -> f.name()).collect(Collectors.joining(", ")),
 					errorMessages.stream().collect(Collectors.joining(" "))));
 		}

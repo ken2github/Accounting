@@ -42,6 +42,7 @@ public class Edenred_1_0_XLS_Reader extends AbstractXLSReader {
 		HSSFRow row;
 		HSSFCell cell;
 		int cols = trickToColumns(sheet, rows);
+		System.out.println("ROWS=" + rows);
 		for (int r = TRANSACTIONS_INITIAL_ROW_INDEX; r <= rows; r++) {
 			row = sheet.getRow(r);
 			if (row != null) {

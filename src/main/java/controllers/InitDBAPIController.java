@@ -73,7 +73,7 @@ public class InitDBAPIController {
 	@Autowired
 	private FileReader fileReader;
 
-	private static List<Integer> YEARS = Arrays.asList(2017, 2018, 2019);
+	private static List<Integer> YEARS = Arrays.asList(2017, 2018, 2019, 2020, 2021, 2022);
 	private static List<Integer> MONTHS = Arrays.asList(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12);
 
 	private static Date parseDate(String date) {
@@ -215,7 +215,7 @@ public class InitDBAPIController {
 			initCountBalanceWithTransaction(bnp_count, new BigDecimal("31159.18"));
 			initCountBalanceWithTransaction(ldd_count, new BigDecimal("12067.81"));
 			initCountBalanceWithTransaction(la_count, new BigDecimal("22896.01"));
-			initCountBalanceWithTransaction(pel_count, new BigDecimal("61315.75"));
+			initCountBalanceWithTransaction(pel_count, new BigDecimal("61360.75"));// ("61315.75"
 			initCountBalanceWithTransaction(assmul_count, new BigDecimal("1032.72"));
 			initCountBalanceWithTransaction(bpn_count, new BigDecimal("11956.02"));
 			initCountBalanceWithTransaction(youcard_count, new BigDecimal("3076.52"));
@@ -223,7 +223,7 @@ public class InitDBAPIController {
 			initCountBalanceWithTransaction(tktresto_count, new BigDecimal("486.00"));
 			initCountBalanceWithTransaction(money_count, new BigDecimal("6872.58"));
 			initCountBalanceWithTransaction(hold_count, new BigDecimal("4.75"));
-			initCountBalanceWithTransaction(franca_count, new BigDecimal("5787.33"));
+			initCountBalanceWithTransaction(franca_count, new BigDecimal("-11265.00"));
 
 			// 35.996,54
 

@@ -1,0 +1,262 @@
+
+
+
+
+
+<html>
+<head>
+<style>
+#OUTLetFac * {
+	font-size:9pt;}
+#OUTLetFac thead, #OUTLetFac tfoot, #OUTLetFac tbody {
+	border:1px solid #000000;}
+#OUTLetFac thead th {
+	background: #e6e6e6;
+	border:solid 1px #ffffff;
+	color:#000000;
+	text-align:center;
+	vertical-align:middle;
+	font-weight:bold;
+	padding:5px;}
+#OUTLetFac tbody td, #OUTLetFac tbody th {
+	border:solid 1px #000000;
+	vertical-align:top;
+	padding:3px 20px 2px 10px;
+	color:#000000;
+	}
+#OUTLetFac .pari {
+	background-color:#ffffff;}
+#OUTLetFac tbody th {
+	text-align:left;}
+#OUTLetFac p.small {
+	padding:0px;}
+#OUTLetFac img {
+	border:0px;
+	padding:0px;}
+#OUTLetFac tfoot th{
+	border-top: solid 1px #003f6e;
+	border-bottom: solid 1px #000000;
+	color: #000000;
+	padding:5px 20px 5px 10px;	}
+#OUTLetFac .negativo {
+		color:red;}
+</style>
+</head>
+<body>
+
+
+
+
+
+
+
+
+	
+
+
+
+
+
+<div class="OUTLetFac">
+	<table id="CCMO_CARK3" class="table table-striped dataTable no-footer">
+<colgroup>
+<col width="16%"/>
+<col width="11%"/>
+<col width="40%"/>
+<col width="16%"/>
+<col width="16%"/>
+</colgroup>
+<thead>
+<tr class="hover">
+<th class=" date" title="Data operazione">Data operazione</th>
+<th class=" number" title="Importo &euro;">Importo &euro;</th>
+<th class="break-xs text" title="Descrizione">Descrizione</th>
+<th class="hidden-xs text" title="Tipo operazione">Tipo operazione</th>
+<th class="hidden-xs text" title="Tipo addebito">Tipo addebito</th>
+
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="oCenter">01/11/2019</td>
+<td class="importo oRight negativo ">-67,94</td>
+<td class="oLeft break-xs">pagamento internet - imp.pren./amzn mktp fr\\amazon.fr\l1855        lux                       /c.aut.450990</td>
+<td class="oCenter hidden-xs">Pagamenti</td>
+<td class="oCenter hidden-xs">Prepagato</td>
+</tr>
+<tr>
+<td class="oCenter">25/10/2019</td>
+<td class="importo oRight negativo ">-15,00</td>
+<td class="oLeft break-xs">pagamento internet - imp.pren./mgp*leetchi.com\\paris\75009        fra                        /c.aut.690469</td>
+<td class="oCenter hidden-xs">Pagamenti</td>
+<td class="oCenter hidden-xs">Prepagato</td>
+</tr>
+<tr>
+<td class="oCenter">07/10/2019</td>
+<td class="importo oRight negativo ">-45,00</td>
+<td class="oLeft break-xs">pagamento internet - carta*5842-10:46-amende radar web rennes cede x fra</td>
+<td class="oCenter hidden-xs">Pagamenti</td>
+<td class="oCenter hidden-xs">Prepagato</td>
+</tr>
+<tr>
+<td class="oCenter">07/10/2019</td>
+<td class="importo oRight negativo ">-10,40</td>
+<td class="oLeft break-xs">pagamento internet - carta*5842-11:06-wikipedia gift 8776009454 us a</td>
+<td class="oCenter hidden-xs">Pagamenti</td>
+<td class="oCenter hidden-xs">Prepagato</td>
+</tr>
+<tr>
+<td class="oCenter">02/09/2019</td>
+<td class="importo oRight negativo ">-10,00</td>
+<td class="oLeft break-xs">pagamento internet - carta*5842-11:49-mgp*leetchi.com0355938 paris  fra</td>
+<td class="oCenter hidden-xs">Pagamenti</td>
+<td class="oCenter hidden-xs">Prepagato</td>
+</tr>
+<tr>
+<td class="oCenter">19/07/2019</td>
+<td class="importo oRight negativo ">-9,67</td>
+<td class="oLeft break-xs">pagamento internet - carta*5842-00:00-amzn mktp fr amazon.fr lux</td>
+<td class="oCenter hidden-xs">Pagamenti</td>
+<td class="oCenter hidden-xs">Prepagato</td>
+</tr>
+<tr>
+<td class="oCenter">19/07/2019</td>
+<td class="importo oRight negativo ">-42,90</td>
+<td class="oLeft break-xs">pagamento internet - carta*5842-00:00-amzn mktp fr amazon.fr lux</td>
+<td class="oCenter hidden-xs">Pagamenti</td>
+<td class="oCenter hidden-xs">Prepagato</td>
+</tr>
+<tr>
+<td class="oCenter">19/07/2019</td>
+<td class="importo oRight negativo ">-51,89</td>
+<td class="oLeft break-xs">pagamento internet - carta*5842-00:00-amzn mktp fr amazon.fr lux</td>
+<td class="oCenter hidden-xs">Pagamenti</td>
+<td class="oCenter hidden-xs">Prepagato</td>
+</tr>
+<tr>
+<td class="oCenter">19/07/2019</td>
+<td class="importo oRight negativo ">-22,93</td>
+<td class="oLeft break-xs">pagamento internet - carta*5842-00:00-amzn mktp fr amazon.fr lux</td>
+<td class="oCenter hidden-xs">Pagamenti</td>
+<td class="oCenter hidden-xs">Prepagato</td>
+</tr>
+<tr>
+<td class="oCenter">19/07/2019</td>
+<td class="importo oRight negativo ">-19,98</td>
+<td class="oLeft break-xs">pagamento internet - carta*5842-00:00-amzn mktp fr amazon.fr lux</td>
+<td class="oCenter hidden-xs">Pagamenti</td>
+<td class="oCenter hidden-xs">Prepagato</td>
+</tr>
+<tr>
+<td class="oCenter">29/06/2019</td>
+<td class="importo oRight negativo ">-68,96</td>
+<td class="oLeft break-xs">pagamento internet - carta*5842-00:00-amazon.fr amazon.fr fra</td>
+<td class="oCenter hidden-xs">Pagamenti</td>
+<td class="oCenter hidden-xs">Prepagato</td>
+</tr>
+<tr>
+<td class="oCenter">21/06/2019</td>
+<td class="importo oRight negativo ">-45,00</td>
+<td class="oLeft break-xs">pagamento internet - carta*5842-23:35-amende radar web rennes cedex fra</td>
+<td class="oCenter hidden-xs">Pagamenti</td>
+<td class="oCenter hidden-xs">Prepagato</td>
+</tr>
+<tr>
+<td class="oCenter">20/06/2019</td>
+<td class="importo oRight negativo ">-68,79</td>
+<td class="oLeft break-xs">pagamento con carta - carta*5842-10:00-uber trip help.uber.co help.uber.com nld</td>
+<td class="oCenter hidden-xs">Pagamenti</td>
+<td class="oCenter hidden-xs">Prepagato</td>
+</tr>
+<tr>
+<td class="oCenter">13/06/2019</td>
+<td class="importo oRight negativo ">-10,00</td>
+<td class="oLeft break-xs">pagamento internet - carta*5842-13:56-mgp*leetchi.com0355938 paris fra</td>
+<td class="oCenter hidden-xs">Pagamenti</td>
+<td class="oCenter hidden-xs">Prepagato</td>
+</tr>
+<tr>
+<td class="oCenter">03/06/2019</td>
+<td class="importo oRight negativo ">-16,00</td>
+<td class="oLeft break-xs">pagamento internet - carta*5842-22:53-forf p.stat web rennes cdx fra</td>
+<td class="oCenter hidden-xs">Pagamenti</td>
+<td class="oCenter hidden-xs">Prepagato</td>
+</tr>
+<tr>
+<td class="oCenter">25/05/2019</td>
+<td class="importo oRight negativo ">-70,83</td>
+<td class="oLeft break-xs">pagamento internet - carta*5842-02:22-easyjet ewmr2l4 luton gbr</td>
+<td class="oCenter hidden-xs">Pagamenti</td>
+<td class="oCenter hidden-xs">Prepagato</td>
+</tr>
+<tr>
+<td class="oCenter">09/05/2019</td>
+<td class="importo oRight negativo ">-29,95</td>
+<td class="oLeft break-xs">pagamento con carta - carta*5842-20:35-dri trend software orderfind com irl</td>
+<td class="oCenter hidden-xs">Pagamenti</td>
+<td class="oCenter hidden-xs">Prepagato</td>
+</tr>
+<tr>
+<td class="oCenter">21/03/2019</td>
+<td class="importo oRight negativo ">-20,00</td>
+<td class="oLeft break-xs">pagamento internet - carta*5842-00:00-amazon.fr amazon.fr fra</td>
+<td class="oCenter hidden-xs">Pagamenti</td>
+<td class="oCenter hidden-xs">Prepagato</td>
+</tr>
+<tr>
+<td class="oCenter">13/03/2019</td>
+<td class="importo oRight negativo ">-10,00</td>
+<td class="oLeft break-xs">pagamento internet - carta*5842-10:15-mgp*leetchi.com0355938 paris fra</td>
+<td class="oCenter hidden-xs">Pagamenti</td>
+<td class="oCenter hidden-xs">Prepagato</td>
+</tr>
+<tr>
+<td class="oCenter">24/02/2019</td>
+<td class="importo oRight negativo ">-49,00</td>
+<td class="oLeft break-xs">pagamento internet - carta*5842-00:00-amazon prime amazon.fr/prm fra</td>
+<td class="oCenter hidden-xs">Pagamenti</td>
+<td class="oCenter hidden-xs">Prepagato</td>
+</tr>
+<tr>
+<td class="oCenter">11/02/2019</td>
+<td class="importo oRight negativo ">-315,89</td>
+<td class="oLeft break-xs">pagamento internet - carta*5842-21:37-easyjet000ewmr2l4 luton, beds gbr</td>
+<td class="oCenter hidden-xs">Pagamenti</td>
+<td class="oCenter hidden-xs">Prepagato</td>
+</tr>
+<tr>
+<td class="oCenter">11/01/2019</td>
+<td class="importo oRight negativo ">-12,22</td>
+<td class="oLeft break-xs">pagamento internet - carta*5842-00:00-amzn mktp fr amazon.fr lux</td>
+<td class="oCenter hidden-xs">Pagamenti</td>
+<td class="oCenter hidden-xs">Prepagato</td>
+</tr>
+<tr>
+<td class="oCenter">17/12/2018</td>
+<td class="importo oRight negativo ">-10,00</td>
+<td class="oLeft break-xs">pagamento internet - carta*5842-12:21-mgp*leetchi.com0355938 paris fra</td>
+<td class="oCenter hidden-xs">Pagamenti</td>
+<td class="oCenter hidden-xs">Prepagato</td>
+</tr>
+<tr>
+<td class="oCenter">29/10/2018</td>
+<td class="importo oRight negativo ">-5,00</td>
+<td class="oLeft break-xs">pagamento internet - carta*5842-15:36-mgp*leetchi.com0355938 paris fra</td>
+<td class="oCenter hidden-xs">Pagamenti</td>
+<td class="oCenter hidden-xs">Prepagato</td>
+</tr>
+<tr>
+<td class="oCenter">29/10/2018</td>
+<td class="importo oRight negativo ">-5,00</td>
+<td class="oLeft break-xs">pagamento internet - carta*5842-15:37-mgp*leetchi.com0355938 paris fra</td>
+<td class="oCenter hidden-xs">Pagamenti</td>
+<td class="oCenter hidden-xs">Prepagato</td>
+</tr>
+</tbody>
+</table>
+
+</div>
+
+</body>
+</html>
+

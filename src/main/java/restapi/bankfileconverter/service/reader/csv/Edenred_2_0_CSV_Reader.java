@@ -26,6 +26,12 @@ public class Edenred_2_0_CSV_Reader extends AbstractCSVReader {
 
 	public static final String PATTERN_REGEXP = "^" + AMOUNT_REGEXP_PART + " €$";
 
+	public static final String AMOUNT2 = "AMOUNT2";
+
+	public static final String AMOUNT2_REGEXP_PART = "(?<" + AMOUNT2 + ">[-]?[\\d]*[,]?[\\d]{0,2})";
+
+	public static final String PATTERN2_REGEXP = "^" + AMOUNT2_REGEXP_PART;
+
 	// private static final int TRANSACTIONS_INITIAL_ROW_INDEX = 1;
 
 	private static final String[] COMPLIANT_HEADERS = { "Date", "Type", "Montant", "Détails" };
@@ -60,11 +66,15 @@ public class Edenred_2_0_CSV_Reader extends AbstractCSVReader {
 						break;
 					case 1: // Status de la transaction
 						titleItems.add(new ReadersHelper.TitleItem("Status", cell));
-						if (!(cell.contains("Transaction effectuée") || cell.contains("Chargement"))) {
-							if (cell.contains("Transaction refusée")) {
+						String cellToLowercase = cell.toLowerCase();
+						if (!(cellToLowercase.contains("transaction effectuée")
+								|| cellToLowercase.contains("chargement")
+								|| cellToLowercase.contains("transaction confirmée"))) {
+							if (cellToLowercase.contains("transaction refusée")
+									|| cellToLowercase.contains("replace card")) {
 								// Skip this transaction
 								isConfirmedTransaction = false;
-							} else if (cell.contains("Transaction en cours de traitement")) {
+							} else if (cellToLowercase.contains("transaction en cours de traitement")) {
 								// Skip this transaction
 								isConfirmedTransaction = false;
 							} else {
@@ -75,13 +85,17 @@ public class Edenred_2_0_CSV_Reader extends AbstractCSVReader {
 						break;
 					case 2: // Montant
 						Pattern p = Pattern.compile(PATTERN_REGEXP);
+						Pattern p2 = Pattern.compile(PATTERN2_REGEXP);
 						Matcher m = p.matcher(cell);
-						if (!m.matches()) {
-							throw new RuntimeException(
-									String.format("NOT_IMPLEMENTED : Expected pattern '%s' was not matched by '%s'",
-											PATTERN_REGEXP, cell));
-						} else {
+						Matcher m2 = p2.matcher(cell);
+						if (m.matches()) {
 							amount = new BigDecimal(m.group(AMOUNT).replaceAll(",", "."));
+						} else if (m2.matches()) {
+							amount = new BigDecimal(m2.group(AMOUNT2).replaceAll(",", "."));
+						} else {
+							throw new RuntimeException(String.format(
+									"NOT_IMPLEMENTED : Expected patterns '%s' or '%s' were not matched by '%s'",
+									PATTERN_REGEXP, PATTERN2_REGEXP, cell));
 						}
 						break;
 					case 3: // Details

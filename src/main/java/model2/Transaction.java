@@ -1,9 +1,12 @@
 package model2;
 
 import java.math.BigDecimal;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class Transaction {
+
+	private static SimpleDateFormat COMPARE_DATE_FORMAT = new SimpleDateFormat("yyy-MM-dd");
 
 	// mandatory
 	private BigDecimal amount;
@@ -70,6 +73,32 @@ public class Transaction {
 	public Transaction setIsCommon(Boolean isCommon) {
 		this.isCommon = isCommon;
 		return this;
+	}
+
+	public boolean isDuplicateOf(Transaction transaction) {
+		int date = (COMPARE_DATE_FORMAT.format(this.date).equals(COMPARE_DATE_FORMAT.format(transaction.getDate()))) ? 1
+				: 0;
+		int title = (this.title.equals(transaction.getTitle())) ? 1 : 0;
+		int amount = ((this.amount.compareTo(transaction.getAmount()) == 0)) ? 1 : 0;
+
+		if (this.countName.equals(transaction.getCountName()) && (date + title + amount) == 2) {
+			System.out.println(String.format("Found PARTIAL MATCH: '%s' '%s' '%s' '%s'", this.countName,
+					COMPARE_DATE_FORMAT.format(this.date), this.title, this.amount));
+			System.out.println(
+					String.format("Equality date(%s) title(%s) amount(%s)", date == 1, title == 1, amount == 1));
+		}
+
+		if (this.countName.equals(transaction.getCountName()) && this.title.equals(transaction.getTitle())
+				&& COMPARE_DATE_FORMAT.format(this.date).equals(COMPARE_DATE_FORMAT.format(transaction.getDate()))) {
+			if ((this.amount.compareTo(transaction.getAmount()) == 0))
+				return true;
+			System.out.println(String.format("Found PARTIAL MATCH: '%s' '%s' '%s'", this.countName,
+					COMPARE_DATE_FORMAT.format(this.date), this.title));
+			System.out.println(String.format("  Amount: '%s' vs '%s' = %s", this.amount, transaction.amount,
+					this.amount.compareTo(transaction.amount)));
+		}
+		return false;
+
 	}
 
 }

@@ -12,13 +12,15 @@ import java.util.TreeMap;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import restapi.bankprovisioninghelper.api.Tokenizer;
+import restapi.transactionsoracle.api.StringTokenizer;
+import restapi.transactionsoracle.service.analyser.BasicTokenizer;
+import restapi.transactionsoracle.service.analyser.TFIDFCalculator;
 
 public class TFIDFCalculatorTests {
 
 	public static Map<String, Set<String>> tokensMap = new TreeMap<String, Set<String>>();
 	public static List<String> sentences;
-	public static Tokenizer tokenizer;
+	public static StringTokenizer tokenizer;
 
 	@BeforeClass
 	public static void init() {

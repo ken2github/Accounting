@@ -8,6 +8,8 @@ import java.util.stream.Collectors;
 
 import org.junit.Test;
 
+import restapi.transactionsoracle.service.analyser.BasicTokenizer;
+
 public class BasicTokenizerTests {
 
 	@Test

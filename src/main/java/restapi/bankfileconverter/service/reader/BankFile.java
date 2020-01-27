@@ -10,8 +10,10 @@ import restapi.bankfileconverter.api.Count;
 import restapi.bankfileconverter.service.reader.csv.Edenred_2_0_CSV_Reader;
 import restapi.bankfileconverter.service.reader.xls.BNP_1_0_XLS_Reader;
 import restapi.bankfileconverter.service.reader.xls.BPN_1_0_XLS_Reader;
+import restapi.bankfileconverter.service.reader.xls.BPN_1_1_XLS_Reader;
 import restapi.bankfileconverter.service.reader.xls.Edenred_1_0_XLS_Reader;
 import restapi.bankfileconverter.service.reader.xls.Internal_1_0_XLS_Reader;
+import restapi.bankfileconverter.service.reader.xls.Internal_2_0_XLS_Reader;
 import restapi.bankfileconverter.service.reader.xls.Spese_1_0_XLS_Reader;
 import restapi.bankfileconverter.service.reader.xls.YOUCARD_1_0_XLS_Reader;
 
@@ -23,6 +25,8 @@ public class BankFile {
 			return new BNP_1_0_XLS_Reader(is);
 		case BPN_1_0:
 			return new BPN_1_0_XLS_Reader(is);
+		case BPN_1_1:
+			return new BPN_1_1_XLS_Reader(is);
 		case YOUCARD_1_0:
 			return new YOUCARD_1_0_XLS_Reader(is);
 		case EDENRED_1_0:
@@ -31,6 +35,8 @@ public class BankFile {
 			return new Edenred_2_0_CSV_Reader((Reader) new InputStreamReader(is));
 		case INTERNAL_1_0:
 			return new Internal_1_0_XLS_Reader(is);
+		case INTERNAL_2_0:
+			return new Internal_2_0_XLS_Reader(is);
 		case SPESE_1_0:
 			return new Spese_1_0_XLS_Reader(is);
 		default:
@@ -46,7 +52,7 @@ public class BankFile {
 		case PEL:
 			return Arrays.asList(BankFileFormat.BNP_1_0);
 		case BPN:
-			return Arrays.asList(BankFileFormat.BPN_1_0);
+			return Arrays.asList(BankFileFormat.BPN_1_0, BankFileFormat.BPN_1_1);
 		case YOUCARD:
 			return Arrays.asList(BankFileFormat.YOUCARD_1_0);
 		case EDENRED:
@@ -54,8 +60,9 @@ public class BankFile {
 		case TKTRESTO:
 		case ASSMUL:
 		case HOLD:
-		case FRANCA:
 			return Arrays.asList(BankFileFormat.INTERNAL_1_0);
+		case FRANCA:
+			return Arrays.asList(BankFileFormat.INTERNAL_2_0);
 		case MONEY:
 			return Arrays.asList(BankFileFormat.SPESE_1_0);
 		default:

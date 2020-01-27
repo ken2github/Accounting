@@ -62,7 +62,7 @@ public class Spese_1_0_XLS_Reader extends AbstractXLSReader {
 							}
 							break;
 						case 1: // Importo - String
-							amount = new BigDecimal(cell.getStringCellValue().replace(",", "."));
+							amount = new BigDecimal(cell.getStringCellValue().replace(".", "").replace(",", "."));
 							break;
 						case 2: // Tipo - String
 							if (cell.getStringCellValue().contains("Entrata")) {

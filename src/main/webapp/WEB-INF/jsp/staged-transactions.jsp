@@ -1,3 +1,5 @@
+<%@page import="java.text.DecimalFormat"%>
+<%@page import="java.util.Map"%>
 <%@page import="java.text.SimpleDateFormat"%>
 <%@page import="java.util.stream.Collectors"%>
 <%@page import="model2.DetailedSector"%>
@@ -15,19 +17,32 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-<title>Insert title here</title>
+<title>Stage Area</title>
 <style type="text/css">
 .tg  {border-collapse:collapse;border-spacing:0;}
 .tg td{font-family:Arial, sans-serif;font-size:14px;padding:10px 5px;border-style:solid;border-width:1px;overflow:hidden;word-break:normal;border-color:black;}
 .tg th{font-family:Arial, sans-serif;font-size:14px;font-weight:normal;padding:10px 5px;border-style:solid;border-width:1px;overflow:hidden;word-break:normal;border-color:black;}
 .tg .tg-bfng{font-family:Verdana, Geneva, sans-serif !important;;background-color:#efefef;border-color:inherit;text-align:left;vertical-align:top}
+.tg .tg-bfng-right{font-family:Verdana, Geneva, sans-serif !important;;background-color:#efefef;border-color:inherit;text-align:right;vertical-align:top}
 .tg .tg-bfngred{font-family:Verdana, Geneva, sans-serif !important;;background-color:#ff7979;border-color:inherit;text-align:left;vertical-align:top}
 .tg .tg-iu63{font-weight:bold;font-family:Verdana, Geneva, sans-serif !important;;border-color:inherit;text-align:left;vertical-align:top}
 .tg .tg-r0kq{font-family:Verdana, Geneva, sans-serif !important;;border-color:inherit;text-align:left;vertical-align:top}
+.tg .tg-r0kq-right{font-family:Verdana, Geneva, sans-serif !important;;border-color:inherit;text-align:right;vertical-align:top}
 .tg .tg-r0kqred{font-family:Verdana, Geneva, sans-serif !important;;background-color:#ff7979;border-color:inherit;text-align:left;vertical-align:top}
 </style>
 </head>
 <body>
+<% 
+	String indexMenuHTML = "";
+	String indexMenuItem = "<a href=\"%s\">%s</a>&nbsp;&nbsp;";
+	List<String> indexMenu = (List<String>) pageContext.findAttribute("indexMenu");
+	for(String item : indexMenu){
+		String[] values = item.split("[!]");
+		indexMenuHTML += String.format(indexMenuItem, values[1],values[0]) ;
+	}
+%>
+<%= indexMenuHTML %>
+<p/>
 
 <form enctype="multipart/form-data" method="post" action="/balancing/staged-transactions/commitAllTransactions">
 <table class="tg">
@@ -48,6 +63,8 @@
         
    List<DetailedTransaction> transactions = stdao.findAll();
    
+   DecimalFormat df = new DecimalFormat("####.00");
+   
    boolean flipflop = false;
    boolean allTransactionClassified=true;
    if(transactions!=null){
@@ -67,7 +84,7 @@
 		   <tr>
 		    <td class="<%= tdclass%>"><%= dt.getCountName()%></td>
 		    <td class="<%= tdclass%>"><%= sdf.format(dt.getDate())%></td>
-		    <td class="<%= tdclass%>"><%= dt.getAmount()%></td>
+		    <td class="<%= tdclass%>-right"><%= df.format(dt.getAmount()).toString()%></td>
 		    <td class="<%= tdclass%>"><%= dt.getTitle()%></td>
 		    <td class="<%= tdClassIsCommon%>"><%= (dt.isCommon()==null)?"":((dt.isCommon())?"Yes":"No") %></td>
 		    <td class="<%= tdClassSectorName%>"><%= (dt.getSectorName()==null)?"":dt.getSectorName()%></td>
@@ -81,12 +98,22 @@
 </table>
 <input id="edit" name="edit" type="hidden" value="editall">
 <%
+boolean isExperimental = true;
 if(allTransactionClassified){
 	%>
-	<input id="saveForm" type="submit" name="commitAllTransactions" value="Commit all transactions" />
+	<input id="saveForm" type="submit" name="actionType" value="commitAllTransactions" />
+	<%
+}else if(isExperimental){
+	%>
+	<input id="saveForm" type="submit" name="actionType" value="setRandomValuesInAllTransactions" />
 	<%
 }
-%> 
+%>
+
+<input id="saveForm" type="submit" name="actionType" value="setIsCommonToYesInAllTransactions" />
+
+<input id="saveForm" type="submit" name="actionType" value="setIsCommonToNoInAllTransactions" />
+ 
 </form>
 
 
