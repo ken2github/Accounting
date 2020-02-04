@@ -86,6 +86,7 @@ public class WebAppController {
 		indexMenu.add(String.format(item, "Home", "home"));
 		indexMenu.add(String.format(item, "Upload", "uploadfile"));
 		indexMenu.add(String.format(item, "Staging", "staged-transactions"));
+		indexMenu.add(String.format(item, "StagingFiltered", "staged-transactions-filtered"));
 		indexMenu.add(String.format(item, "Status", "status"));
 		indexMenu.add(String.format(item, "Graphs", "to-do-page"));
 		indexMenu.add(String.format(item, "UserGuide", "user-guide"));
@@ -460,6 +461,88 @@ public class WebAppController {
 		model.put("indexMenu", getIndexMenu());
 
 		return "staged-transactions";
+	}
+
+	@RequestMapping("/staged-transactions-filtered/search")
+	public String stagedTransactionsFilteredSearch(Map<String, Object> model, @RequestParam("filter") String filter) {
+		System.out.println("Edit inside Filtered Controller");
+
+		List<DetailedSector> sectors = sAPI.findAll().stream()
+				.sorted((ds1, ds2) -> ds1.getName().compareTo(ds2.getName())).collect(Collectors.toList());
+		model.put("sectors", sectors);
+
+		List<DetailedTransaction> stagedTransactions = stAPI.findAll();
+		model.put("stagedTransactions", stagedTransactions);
+		model.put("indexMenu", getIndexMenu());
+
+		List<DetailedTransaction> stagedTransactionsFiltered = new ArrayList<>();
+		if (filter != null && !filter.equals("")) {
+			for (DetailedTransaction dt : stagedTransactions) {
+				if (dt.getTitle().contains(filter)) {
+
+					stagedTransactionsFiltered.add(dt);
+				}
+			}
+		}
+
+		model.put("stagedTransactionsFiltered", stagedTransactionsFiltered);
+		model.put("appliedFilter", filter);
+
+		return "staged-transactions-filtered";
+	}
+
+	@RequestMapping("/staged-transactions-filtered/update")
+	public String stagedTransactionsFilteredSearch(Map<String, Object> model,
+			@RequestParam("appliedFilter") String appliedFilter, @RequestParam("isCommon") String isCommon,
+			@RequestParam("sectorName") String sector) {
+		System.out.println("Edit inside Filtered Controller update");
+
+		List<DetailedSector> sectors = sAPI.findAll().stream()
+				.sorted((ds1, ds2) -> ds1.getName().compareTo(ds2.getName())).collect(Collectors.toList());
+		model.put("sectors", sectors);
+
+		List<DetailedTransaction> stagedTransactions = stAPI.findAll();
+		model.put("stagedTransactions", stagedTransactions);
+		model.put("indexMenu", getIndexMenu());
+
+		List<DetailedTransaction> stagedTransactionsFiltered = new ArrayList<>();
+		if (appliedFilter != null && !appliedFilter.equals("")) {
+			for (DetailedTransaction dt : stagedTransactions) {
+				if (dt.getTitle().contains(appliedFilter)) {
+					stagedTransactionsFiltered.add(dt);
+					if (isCommon != null && !isCommon.equals("")) {
+						dt.setIsCommon(isCommon.equals("true"));
+					}
+					if (sector != null && !sector.equals("")) {
+						dt.setSectorName(sector);
+					}
+					stAPI.updateTransaction(dt);
+				}
+			}
+		}
+
+		model.put("stagedTransactionsFiltered", stagedTransactionsFiltered);
+		model.put("appliedFilter", appliedFilter);
+
+		return "staged-transactions-filtered";
+	}
+
+	@RequestMapping("/staged-transactions-filtered")
+	public String stagedTransactionsFiltered(Map<String, Object> model) {
+		System.out.println("Edit inside Filtered Controller");
+
+		List<DetailedSector> sectors = sAPI.findAll().stream()
+				.sorted((ds1, ds2) -> ds1.getName().compareTo(ds2.getName())).collect(Collectors.toList());
+		model.put("sectors", sectors);
+
+		List<DetailedTransaction> stagedTransactions = stAPI.findAll();
+		model.put("stagedTransactions", stagedTransactions);
+		model.put("indexMenu", getIndexMenu());
+
+		model.put("stagedTransactionsFiltered", Arrays.asList());
+		model.put("appliedFilter", "");
+
+		return "staged-transactions-filtered";
 	}
 
 	@RequestMapping("/staged-transactions/edit")
