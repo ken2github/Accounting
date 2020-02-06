@@ -89,6 +89,9 @@ Status
 
 
 </ul>
-
+<p></p>
+<p>Notice: </p>
+<p>'FRANCA' status may be fake as per "Prestito franca xxx" operations. </p>
+<p>Ideally, such operations should be added only through 'Upload' process. Waiting for all standard operations at corresponding date.</p>
 </body>
 </html>

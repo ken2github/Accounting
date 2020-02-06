@@ -25,6 +25,7 @@
 	<classpathentry kind="src" path="src/main/webapp/WEB-INF/jsp"/>
 	<classpathentry kind="src" path="src/main/resources/resources/public/static"/>
 	<classpathentry kind="src" path="src/main/resources/static"/>
+	<classpathentry kind="src" path="static"/>
 	<classpathentry kind="con" path="org.eclipse.m2e.MAVEN2_CLASSPATH_CONTAINER">
 		<attributes>
 			<attribute name="maven.pomderived" value="true"/>

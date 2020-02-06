@@ -1,27 +1,28 @@
 package test.on.velocity;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.fail;
+
 import java.io.File;
+
 import org.junit.Test;
 
-import deprecated.reporting.ReportException;
-import deprecated.reporting.Reportable;
-import deprecated.reporting.VelocityReporter;
+import deprecated.velocity.VelocityReporter;
 
 public class VelocityTest {
 
 	@Test
 	public void test() {
-		Reportable vr = new VelocityReporter();
+		VelocityReporter vr = new VelocityReporter();
 		try {
-			File outputDirectpry = new File("C:\\Users\\primo\\git\\Accounting\\src\\test\\resources\\velocity"); 
-			vr.createReport(null, outputDirectpry);
+			File outputDirectpry = new File("C:\\Users\\primo\\git\\Accounting\\src\\test\\resources\\velocity");
+			vr.createReport(outputDirectpry);
 			assertEquals(1, outputDirectpry.listFiles().length);
-		} catch (ReportException e) {
+		} catch (Exception e) {
 			e.printStackTrace();
-			fail("Got unexpected exception: "+e.toString());
+			fail("Got unexpected exception: " + e.toString());
 		}
-		
+
 	}
 
 }

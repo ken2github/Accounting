@@ -1,6 +1,5 @@
 package controllers;
 
-import static deprecated.store.io.Format.RAW_SEPARATOR_REGEXP;
 import static restapi.bankfileconverter.api.Count.ASSMUL;
 import static restapi.bankfileconverter.api.Count.BNP;
 import static restapi.bankfileconverter.api.Count.BPN;
@@ -14,11 +13,9 @@ import static restapi.bankfileconverter.api.Count.PEL;
 import static restapi.bankfileconverter.api.Count.TKTRESTO;
 import static restapi.bankfileconverter.api.Count.YOUCARD;
 
-import java.io.IOException;
 import java.math.BigDecimal;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
@@ -29,19 +26,14 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.multipart.MultipartFile;
 
 import controllers.exceptionhandler.ApiError;
 import controllers.exceptionhandler.ApiError.ApiErrorCode;
 import controllers.exceptionhandler.ApiException;
 import dao.DAOException;
-import dao.FileReader;
-import dao.ReadOnlyTransactionList;
 import model2.Count;
 import model2.DetailedCount;
 import model2.DetailedSector;
@@ -56,22 +48,22 @@ public class InitDBAPIController {
 	Logger logger = LoggerFactory.getLogger(InitDBAPIController.class);
 
 	@Autowired
-	private AccountedYearsAPIController accountedyearsAPIC;
+	private DaoDBAccountedYearsAPIController accountedyearsAPIC;
 
 	@Autowired
-	private SectorsAPIController sectorsAPIC;
+	private DaoDBSectorsAPIController sectorsAPIC;
 
 	@Autowired
-	private CountsAPIController countsAPIC;
+	private DaoDBCountsAPIController countsAPIC;
 
 	@Autowired
-	private TransactionsAPIController transactionsAPIC;
+	private DaoDBTransactionsAPIController transactionsAPIC;
 
 	@Autowired
-	private StagedTransactionsAPIController stagedTransactionsAPIC;
+	private DaoDBStagedTransactionsAPIController stagedTransactionsAPIC;
 
-	@Autowired
-	private FileReader fileReader;
+	// @Autowired
+	// private FileReader fileReader;
 
 	private static List<Integer> YEARS = Arrays.asList(2017, 2018, 2019, 2020, 2021, 2022);
 	private static List<Integer> MONTHS = Arrays.asList(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12);
@@ -86,45 +78,49 @@ public class InitDBAPIController {
 
 	}
 
-	@PostMapping("/uploadFile")
-	public boolean uploadFile(@RequestParam("file") MultipartFile file) {
-		// Normalize file name
-		String fileName = file.getOriginalFilename();
-		System.out.println(fileName);
-
-		try {
-			// Check if the file's name contains invalid characters
-			if (fileName.contains("..")) {
-				throw new ApiException(
-						new ApiError().setErrorCode(ApiErrorCode.INVALID_INPUT).setHttpStatus(HttpStatus.BAD_REQUEST)
-								.setExternalMessage("Filename 'fileName' contains invalid path sequence."));
-			}
-
-			// Parse filename to get count, year, months
-			String[] items = fileName.split(RAW_SEPARATOR_REGEXP);
-			String count = items[0];
-			int year = Integer.parseInt(items[1]);
-			int months = items.length - 6; // with balance
-			List<Date> nominalMonths = new ArrayList<>();
-			for (int i = 0; i < months; i++) {
-				nominalMonths.add(parseDate(String.format("%s-%s-01", year, items[2 + i])));
-			}
-
-			ReadOnlyTransactionList transactionList = fileReader.getReadOnlyTransactionList(file.getInputStream(),
-					count, nominalMonths, fileName);
-			for (Transaction transaction : transactionList.getTransactions()) {
-				transactionsAPIC.createTransaction(transaction);
-			}
-		} catch (DAOException ex) {
-			throw new ApiException(ApiError.parseFromDBError(ex.getDBError()));
-			// "Could not store file " + fileName + ". Please try again!", ex);
-		} catch (IOException e) {
-			String message = String.format("Input file '%s' cannot be opened.", fileName);
-			throw new ApiException(new ApiError(HttpStatus.BAD_REQUEST, ApiErrorCode.INVALID_INPUT, message, message));
-		}
-
-		return true;
-	}
+	// @PostMapping("/uploadFile")
+	// public boolean uploadFile(@RequestParam("file") MultipartFile file) {
+	// // Normalize file name
+	// String fileName = file.getOriginalFilename();
+	// System.out.println(fileName);
+	//
+	// try {
+	// // Check if the file's name contains invalid characters
+	// if (fileName.contains("..")) {
+	// throw new ApiException(
+	// new
+	// ApiError().setErrorCode(ApiErrorCode.INVALID_INPUT).setHttpStatus(HttpStatus.BAD_REQUEST)
+	// .setExternalMessage("Filename 'fileName' contains invalid path sequence."));
+	// }
+	//
+	// // Parse filename to get count, year, months
+	// String[] items = fileName.split(RAW_SEPARATOR_REGEXP);
+	// String count = items[0];
+	// int year = Integer.parseInt(items[1]);
+	// int months = items.length - 6; // with balance
+	// List<Date> nominalMonths = new ArrayList<>();
+	// for (int i = 0; i < months; i++) {
+	// nominalMonths.add(parseDate(String.format("%s-%s-01", year, items[2 + i])));
+	// }
+	//
+	// ReadOnlyTransactionList transactionList =
+	// fileReader.getReadOnlyTransactionList(file.getInputStream(),
+	// count, nominalMonths, fileName);
+	// for (Transaction transaction : transactionList.getTransactions()) {
+	// transactionsAPIC.createTransaction(transaction);
+	// }
+	// } catch (DAOException ex) {
+	// throw new ApiException(ApiError.parseFromDBError(ex.getDBError()));
+	// // "Could not store file " + fileName + ". Please try again!", ex);
+	// } catch (IOException e) {
+	// String message = String.format("Input file '%s' cannot be opened.",
+	// fileName);
+	// throw new ApiException(new ApiError(HttpStatus.BAD_REQUEST,
+	// ApiErrorCode.INVALID_INPUT, message, message));
+	// }
+	//
+	// return true;
+	// }
 
 	@RequestMapping(method = RequestMethod.POST)
 	public void initDB() {

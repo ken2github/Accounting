@@ -11,12 +11,10 @@ import org.springframework.jdbc.core.JdbcTemplate;
 
 import dao.AccountedYearDAO;
 import dao.CountDAO;
-import dao.FileReader;
 import dao.IndexesDAO;
 import dao.SectorDAO;
 import dao.StagedTransactionDAO;
 import dao.TransactionDAO;
-import dao.file.FileReaderImpl;
 import dao.jdbc.JDBCTemplateAccountedYearDAO;
 import dao.jdbc.JDBCTemplateCountDAO;
 import dao.jdbc.JDBCTemplateIndexesDAO;
@@ -107,8 +105,8 @@ public class DBConfiguration {
 		return sdao;
 	}
 
-	@Bean
-	public FileReader fileReader() {
-		return new FileReaderImpl();
-	}
+	// @Bean
+	// public FileReader fileReader() {
+	// return new FileReaderImpl();
+	// }
 }

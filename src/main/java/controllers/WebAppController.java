@@ -42,22 +42,22 @@ public class WebAppController {
 	private String message = "Hello World";
 
 	@Autowired
-	private AccountedYearsAPIController ayAPI;
+	private DaoDBAccountedYearsAPIController ayAPI;
 
 	@Autowired
-	private CountsAPIController cAPI;
+	private DaoDBCountsAPIController cAPI;
 
 	@Autowired
 	private BankFileReaderAPIController bfrAPI;
 
 	@Autowired
-	private SectorsAPIController sAPI;
+	private DaoDBSectorsAPIController sAPI;
 
 	@Autowired
-	private StagedTransactionsAPIController stAPI;
+	private DaoDBStagedTransactionsAPIController stAPI;
 
 	@Autowired
-	private TransactionsAPIController tAPI;
+	private DaoDBTransactionsAPIController tAPI;
 
 	@Autowired
 	private BalancesIndexAPIController biAPI;
@@ -92,6 +92,16 @@ public class WebAppController {
 		indexMenu.add(String.format(item, "UserGuide", "user-guide"));
 
 		return indexMenu;
+	}
+
+	@RequestMapping("/to-do-page")
+	public String toDoPage(Map<String, Object> model) {
+		return "d3-example";
+	}
+
+	@RequestMapping("/google")
+	public String google(Map<String, Object> model) {
+		return "google-example";
 	}
 
 	@RequestMapping("/status")
