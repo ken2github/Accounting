@@ -1,20 +1,79 @@
+<%@page import="dao.MonthAverageFlowMetric"%>
+<%@page import="dao.FlowMetric"%>
+<%@page import="java.util.Arrays"%>
+<%@page import="java.text.DecimalFormat"%>
+<%@page import="java.util.HashMap"%>
+<%@page import="java.math.BigDecimal"%>
+<%@page import="java.util.Map"%>
+<%@page import="java.util.stream.Collectors"%>
+<%@page import="dao.IndexesDAO2"%>
+<%@page import="org.springframework.web.servlet.support.RequestContextUtils"%>
+<%@page import="org.springframework.web.context.WebApplicationContext"%>
 <%@page import="java.util.ArrayList"%>
 <%@page import="java.util.List"%>
 <%@page language="java" contentType="text/html; charset=ISO-8859-1" pageEncoding="ISO-8859-1"%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <%	
-	List<String> rowsList = new ArrayList();
-	
-	//rows+=String.format("['[SPS]',    		'Flows',       0,     	            0]");
 
-	String rows = "";
-	for(int i=0; i<rowsList.size(); i++){		
-		rows+=String.format("['%s','%s',%s,%s]");
-		if(i<rowsList.size()-1){
-			rows+=",";
+	WebApplicationContext aC = RequestContextUtils.findWebApplicationContext(request);
+	IndexesDAO2 idao = (IndexesDAO2) aC.getBean("indexDAO2");
+	List<MonthAverageFlowMetric> flows = (List<MonthAverageFlowMetric>) idao.findAverages(2018);
+	flows = flows.stream().filter(fm -> fm.isCommon).collect(Collectors.toList());
+	
+	flows.stream().forEach(fm -> System.out.println(fm.toString()));
+
+	String SUPERSECTOR_TABLE_ROW_FORMAT = "['[%s]','Flows',0,0]";
+	String TABLE_ROW_FORMAT = "['%s %s','[%s]',%s,%s]";
+	DecimalFormat df = new DecimalFormat("####.00");
+	
+	String entrateRows = flows.stream().filter(fm -> fm.sign.intValue() > 0).map(fm -> {
+		String amount = df.format(fm.amount).toString().replaceAll(",", ".");
+		String abs = df.format(fm.amount.abs()).toString().replaceAll(",", ".");
+		return Arrays.asList(
+			String.format(SUPERSECTOR_TABLE_ROW_FORMAT,fm.sectorFatherName),
+			String.format(TABLE_ROW_FORMAT,fm.sectorName,amount,fm.sectorFatherName,abs,amount));
+	}).flatMap(sl -> sl.stream()).distinct().collect(Collectors.joining(","));
+	System.out.println(entrateRows);	
+	
+	String usciteRows = flows.stream().filter(fm -> fm.sign.intValue() < 0).map(fm -> {
+		String amount = df.format(fm.amount).toString().replaceAll(",", ".");
+		String abs = df.format(fm.amount.abs()).toString().replaceAll(",", ".");
+		return 
+	Arrays.asList(
+			String.format(SUPERSECTOR_TABLE_ROW_FORMAT,fm.sectorFatherName),
+			String.format(TABLE_ROW_FORMAT,fm.sectorName,amount,fm.sectorFatherName,abs,amount));
+	}).flatMap(sl -> sl.stream()).distinct().collect(Collectors.joining(","));
+	System.out.println(usciteRows);
+			
+	Map<MonthAverageFlowMetric,BigDecimal> nettiFlowsMap = new HashMap<MonthAverageFlowMetric,BigDecimal> ();
+	flows.stream().forEach(fm -> {
+		MonthAverageFlowMetric newFm = fm.doClone();		
+		newFm.sign=null;
+		newFm.amount=null;
+		if(!nettiFlowsMap.containsKey(newFm)){
+			nettiFlowsMap.put(newFm,fm.amount);
+		}else{
+			nettiFlowsMap.replace(newFm,nettiFlowsMap.get(newFm).add(fm.amount));
 		}
-	}
-	String treeMapTitle = "Titolo Grafico";
+	});	
+	
+	String nettiRows = nettiFlowsMap.keySet().stream().map(fm -> {
+		MonthAverageFlowMetric newFm = fm.doClone();	
+		newFm.amount = nettiFlowsMap.get(fm);
+		return newFm;
+	}).map(fm -> {
+		String amount = df.format(fm.amount).toString().replaceAll(",", ".");
+		String abs = df.format(fm.amount.abs()).toString().replaceAll(",", ".");
+		return 
+	Arrays.asList(
+			String.format(SUPERSECTOR_TABLE_ROW_FORMAT,fm.sectorFatherName),
+			String.format(TABLE_ROW_FORMAT,fm.sectorName,amount,fm.sectorFatherName,abs,amount));
+	}).flatMap(sl -> sl.stream()).distinct().collect(Collectors.joining(","));
+	System.out.println(nettiRows);
+	
+	String treeMapTitleEntrate = "Entrate";
+	String treeMapTitleUscite = "Uscite";
+	String treeMapTitleNetti = "Netti";
 %>
 <html>
 <head>
@@ -27,20 +86,20 @@
         var data = google.visualization.arrayToDataTable([
  	      ['Settore', 		'SuperSector', 		'Size', 			'Flow'],
     	  ['Flows',    	null,           0,                  0],
-          <%=rows%>
+          <%=usciteRows%>
         ]);
         tree = new google.visualization.TreeMap(document.getElementById('chart_uscite'));
         tree.draw(data, {
-          minColor: '#f00',
-          midColor: '#ddd',
-          maxColor: '#0d0',
+        	minColor: '#ff0000',
+            midColor: '#ff7676',
+            maxColor: '#ffe2e2',
           headerHeight: 20,
           fontColor: 'black',
           fontSize: 15,
           maxDepth: 4,
           showScale: true,
           headerHeight: 20,
-          title: '<%=treeMapTitle%>',
+          title: '<%=treeMapTitleUscite%>',
           useWeightedAverageForAggregation: false,
           showTooltips: true,
           showScale: false
@@ -54,20 +113,20 @@
         var data = google.visualization.arrayToDataTable([
  	      ['Settore', 		'SuperSector', 		'Size', 			'Flow'],
     	  ['Flows',    	null,           0,                  0],
-          <%=rows%>
+          <%=entrateRows%>
         ]);
         tree = new google.visualization.TreeMap(document.getElementById('chart_entrate'));
-        tree.draw(data, {
-          minColor: '#f00',
-          midColor: '#ddd',
-          maxColor: '#0d0',
+        tree.draw(data, {          
+          minColor: '#dbffdb',
+          midColor: '#83ff83',
+          maxColor: '#00ff00',
           headerHeight: 20,
           fontColor: 'black',
           fontSize: 15,
           maxDepth: 4,
           showScale: true,
           headerHeight: 20,
-          title: '<%=treeMapTitle%>',
+          title: '<%=treeMapTitleEntrate%>',
           useWeightedAverageForAggregation: false,
           showTooltips: true,
           showScale: false
@@ -81,7 +140,7 @@
         var data = google.visualization.arrayToDataTable([
  	      ['Settore', 		'SuperSector', 		'Size', 			'Flow'],
     	  ['Flows',    	null,           0,                  0],
-          <%=rows%>
+          <%=nettiRows%>
         ]);
         tree = new google.visualization.TreeMap(document.getElementById('chart_netto'));
         tree.draw(data, {
@@ -94,7 +153,7 @@
           maxDepth: 4,
           showScale: true,
           headerHeight: 20,
-          title: '<%=treeMapTitle%>',
+          title: '<%=treeMapTitleNetti%>',
           useWeightedAverageForAggregation: false,
           showTooltips: true,
           showScale: false
@@ -114,22 +173,6 @@
 %>
 <%=indexMenuHTML%>
 <p/>
-<%
-// 	WebApplicationContext aC = RequestContextUtils.findWebApplicationContext(request);
-//    StagedTransactionDAO stdao = (StagedTransactionDAO) aC.getBean("stagedTransactionDAO");
-   
-//    List<DetailedSector> sectors = (List<DetailedSector>) pageContext.findAttribute("sectors");
-       
-// 	DetailedTransaction dt = (DetailedTransaction) request.getAttribute("detailed_staged_transaction") ;        
-//    	List<DetailedTransaction> transactions = stdao.findAll();  
-// 	transactions=transactions.stream().sorted((dt1,dt2)->dt1.getDate().compareTo(dt2.getDate())).collect(Collectors.toList());
-   	
-// 	AccountedYearDAO aydao = (AccountedYearDAO) aC.getBean("accountedYearDAO");
-// 	TransactionDAO tdao = (TransactionDAO) aC.getBean("transactionDAO");
-// 	TransactionsOracle bta = (TransactionsOracle) aC.getBean("transactionOracle");
-		
-// 	DecimalFormat df = new DecimalFormat("####.00");	
-%>
 <form enctype="multipart/form-data" method="post" action="/balancing/graph/treeMap%>">
 <table width="100%" class="tg">
 <tr>			
@@ -162,7 +205,6 @@
 </tr>		
 </table>
 </form>		
-	
 <table>
 <tr>
 <td>
@@ -175,6 +217,8 @@
 <tr>
 <td>
 <div id="chart_netto" style="width: 900px; height: 900px;"></div>
+</td>
+<td>
 </td>
 </tr>
 </table>

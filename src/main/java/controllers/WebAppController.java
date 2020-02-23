@@ -113,7 +113,6 @@ public class WebAppController {
 	@RequestMapping("/graph/treeMap")
 	public String graphTreeMap(Map<String, Object> model) {
 		logger.info("GET /graph/treeMap");
-		System.out.println("Pippo");
 		model.put("message", this.message);
 		model.put("indexMenu", getIndexMenu());
 		return "treeMap";
@@ -125,12 +124,12 @@ public class WebAppController {
 		return "google-example";
 	}
 
-	@RequestMapping("/google/treemap")
-	public String googleTreeMap(Map<String, Object> model) {
-		logger.info("GET /google");
-
-		return "treeMap";
-	}
+	// @RequestMapping("/google/treemap")
+	// public String googleTreeMap(Map<String, Object> model) {
+	// logger.info("GET /google");
+	//
+	// return "treeMap";
+	// }
 
 	@RequestMapping("/status")
 	public String status(Map<String, Object> model) {

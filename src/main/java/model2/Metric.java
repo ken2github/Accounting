@@ -25,7 +25,7 @@ public class Metric implements Serializable {
 
 	private BigDecimal amount;
 
-	private List<AbstractMap.SimpleEntry<KEY, String>> fixedKeys;
+	private List<AbstractMap.SimpleEntry<KEY, String>> keys;
 
 	public Metric() {
 		super();
@@ -40,12 +40,12 @@ public class Metric implements Serializable {
 		return this;
 	}
 
-	public List<AbstractMap.SimpleEntry<KEY, String>> getFixedKeys() {
-		return fixedKeys;
+	public List<AbstractMap.SimpleEntry<KEY, String>> getKeys() {
+		return keys;
 	}
 
-	public Metric setFixedKeys(List<AbstractMap.SimpleEntry<KEY, String>> fixedKeys) {
-		this.fixedKeys = fixedKeys;
+	public Metric setKeys(List<AbstractMap.SimpleEntry<KEY, String>> fixedKeys) {
+		this.keys = fixedKeys;
 		return this;
 	}
 
