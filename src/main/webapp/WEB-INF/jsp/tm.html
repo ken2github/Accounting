@@ -1,0 +1,40 @@
+<html>
+  <head>
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+    <script type="text/javascript">
+      google.charts.load('current', {'packages':['treemap']});
+      google.charts.setOnLoadCallback(drawChart);
+      function drawChart() {
+        var data = google.visualization.arrayToDataTable([
+          ['Settore', 		'Parent', 		'Taglia', 			'Tipo di spesa (color)'],
+          ['Flows',    	null,           0,                  0],
+          ['[SPS]',    		'Flows',       0,     	            0],
+          ['SPS.CIBO - 20',   	'[SPS]',       	20,     			0],
+          ['SPS - 15',   	'[SPS]',       	15,     			0]
+        ]);
+
+        tree = new google.visualization.TreeMap(document.getElementById('chart_div'));
+
+        tree.draw(data, {
+          minColor: '#f00',
+          midColor: '#ddd',
+          maxColor: '#0d0',
+          headerHeight: 20,
+          fontColor: 'black',
+          fontSize: 15,
+          maxDepth: 4,
+          showScale: true,
+          headerHeight: 20,
+          title: 'Coppolo',
+          useWeightedAverageForAggregation: false,
+          showTooltips: true,
+          showScale: false
+        });
+
+      }
+    </script>
+  </head>
+  <body>    
+    <div id="chart_div" style="width: 1300px; height: 1000px;"></div>
+  </body>
+</html>

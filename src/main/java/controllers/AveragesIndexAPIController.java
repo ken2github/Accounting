@@ -43,6 +43,7 @@ public class AveragesIndexAPIController {
 			@RequestParam(required = false, defaultValue = _NONE_) String sign, HttpServletRequest request)
 			throws ClassNotFoundException, NoSuchMethodException, SecurityException, IllegalAccessException,
 			IllegalArgumentException, InvocationTargetException {
+		logger.info("BOOOO");
 
 		IndexQuery query = makeQueryFromParams(sector, super_sector, is_common, sign);
 

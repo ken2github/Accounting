@@ -1,5 +1,6 @@
 package dao.jdbc;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
 
@@ -12,6 +13,10 @@ import dao.CountDAO;
 import dao.DAONotFoundException;
 import dao.DBError;
 import dao.DBError.DBErrorCode;
+import dao.Observable;
+import dao.Observer;
+import dao.Observer.Change;
+import dao.Observer.ChangeType;
 import dao.SectorDAO;
 import dao.TransactionDAO;
 import model2.DetailedCount;
@@ -19,7 +24,8 @@ import model2.DetailedSector;
 import model2.DetailedTransaction;
 import model2.Transaction;
 
-public class JDBCTemplateTransactionDAO extends JdbcDaoSupport implements TransactionDAO {
+public class JDBCTemplateTransactionDAO extends JdbcDaoSupport
+		implements TransactionDAO, Observable<DetailedTransaction> {
 
 	protected static final String INSERT_SQL = "INSERT INTO transactions (id,amount,title,sector_id,is_common,count_id,date) VALUES (?,?,?,?,?,?,?)";
 	protected static final String UPDATE_SQL = "UPDATE transactions SET amount = ?, title = ?, sector_id = ?, is_common = ?, count_id = ?, date = ? WHERE id = ?";
@@ -30,6 +36,8 @@ public class JDBCTemplateTransactionDAO extends JdbcDaoSupport implements Transa
 
 	protected static final String SECTOR_DOES_NOT_EXIST_ERRMSG = "The '%s' sector does not exist in DB.";
 	protected static final String COUNT_DOES_NOT_EXIST_ERRMSG = "The '%s' count does not exist in DB.";
+
+	private SimpleObservableImpl<DetailedTransaction> observableImpl = new SimpleObservableImpl<>();
 
 	@Autowired
 	private SectorDAO sectorDAO;
@@ -46,7 +54,12 @@ public class JDBCTemplateTransactionDAO extends JdbcDaoSupport implements Transa
 		this.getJdbcTemplate().update(INSERT_SQL, id, s.getAmount(), s.getTitle(), sectorId, s.isCommon(), countId,
 				s.getDate());
 
-		return findById(id);
+		DetailedTransaction dt = findById(id);
+
+		observableImpl.getObservers().stream().forEach(
+				observer -> observer.update(Arrays.asList(new Change<DetailedTransaction>(dt, ChangeType.add))));
+
+		return dt;
 	}
 
 	private String getActualSectorIdOrThrowException(Transaction s) {
@@ -98,7 +111,12 @@ public class JDBCTemplateTransactionDAO extends JdbcDaoSupport implements Transa
 		this.getJdbcTemplate().update(UPDATE_SQL, t.getAmount(), t.getTitle(), s.getId(), t.isCommon(), c.getId(),
 				t.getDate(), t.getId());
 
-		return findById(t.getId());
+		DetailedTransaction ut = findById(t.getId());
+
+		observableImpl.getObservers().stream().forEach(
+				observer -> observer.update(Arrays.asList(new Change<DetailedTransaction>(ut, ChangeType.mod))));
+
+		return ut;
 	}
 
 	@Override
@@ -121,6 +139,8 @@ public class JDBCTemplateTransactionDAO extends JdbcDaoSupport implements Transa
 	public boolean deleteById(String id) {
 		try {
 			this.getJdbcTemplate().update(DELETE_BY_ID, id);
+			observableImpl.getObservers().stream().forEach(observer -> observer.update(Arrays
+					.asList(new Change<DetailedTransaction>(new DetailedTransaction().setId(id), ChangeType.rem))));
 		} catch (EmptyResultDataAccessException e) {
 			throw new DAONotFoundException(new DBError(DBErrorCode.RESOURCE_NOT_DELETED,
 					String.format("Transaction id '%s' was not deleted", id)));
@@ -133,6 +153,16 @@ public class JDBCTemplateTransactionDAO extends JdbcDaoSupport implements Transa
 		List<DetailedTransaction> lds = this.getJdbcTemplate().query(SELECT_BY_YEAR_MONTH_SQL,
 				BeanPropertyRowMapper.newInstance(DetailedTransaction.class), year, month);
 		return lds;
+	}
+
+	@Override
+	public void subscribe(Observer<DetailedTransaction> observer) {
+		observableImpl.subscribe(observer);
+	}
+
+	@Override
+	public void unsubscribe(Observer<DetailedTransaction> observer) {
+		observableImpl.unsubscribe(observer);
 	}
 
 }

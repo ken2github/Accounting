@@ -1,5 +1,6 @@
 package dao.jdbc;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
 
@@ -11,11 +12,15 @@ import dao.DAOException;
 import dao.DAONotFoundException;
 import dao.DBError;
 import dao.DBError.DBErrorCode;
+import dao.Observable;
+import dao.Observer;
+import dao.Observer.Change;
+import dao.Observer.ChangeType;
 import dao.SectorDAO;
 import model2.DetailedSector;
 import model2.Sector;
 
-public class JDBCTemplateSectorDAO extends JdbcDaoSupport implements SectorDAO {
+public class JDBCTemplateSectorDAO extends JdbcDaoSupport implements SectorDAO, Observable<DetailedSector> {
 
 	protected static final String INSERT_SQL = "INSERT INTO sectors (id,name,description,father_id,activation_date,deactivation_date) VALUES (?,?,?,?,?,?)";
 	protected static final String UPDATE_SQL = "UPDATE sectors SET name = ?, description = ?, activation_date = ?, deactivation_date = ? WHERE id = ?";
@@ -30,6 +35,8 @@ public class JDBCTemplateSectorDAO extends JdbcDaoSupport implements SectorDAO {
 
 	protected static final String ILLEGAL_UPDATE_NAME_ERRMSG = "The actual sector name '%s' cannot be updated with '%s' value.";
 
+	private SimpleObservableImpl<DetailedSector> observableImpl = new SimpleObservableImpl<>();
+
 	@Override
 	public DetailedSector insert(Sector s) {
 		String id = UUID.randomUUID().toString();
@@ -41,7 +48,12 @@ public class JDBCTemplateSectorDAO extends JdbcDaoSupport implements SectorDAO {
 		this.getJdbcTemplate().update(INSERT_SQL, id, s.getName(), s.getDescription(), fatherId, s.getActivationDate(),
 				s.getDeactivationDate());
 
-		return findById(id);
+		DetailedSector ds = findById(id);
+
+		observableImpl.getObservers().stream()
+				.forEach(observer -> observer.update(Arrays.asList(new Change<DetailedSector>(ds, ChangeType.add))));
+
+		return ds;
 	}
 
 	private String getActualFatherIdOrThrowException(Sector s) {
@@ -76,7 +88,12 @@ public class JDBCTemplateSectorDAO extends JdbcDaoSupport implements SectorDAO {
 		this.getJdbcTemplate().update(UPDATE_SQL, s.getName(), s.getDescription(), s.getActivationDate(),
 				s.getDeactivationDate(), s.getId());
 
-		return findById(s.getId());
+		DetailedSector us = findById(s.getId());
+
+		observableImpl.getObservers().stream()
+				.forEach(observer -> observer.update(Arrays.asList(new Change<DetailedSector>(us, ChangeType.mod))));
+
+		return us;
 	}
 
 	@Override
@@ -120,6 +137,8 @@ public class JDBCTemplateSectorDAO extends JdbcDaoSupport implements SectorDAO {
 	public boolean deleteById(String id) {
 		try {
 			this.getJdbcTemplate().update(DELETE_BY_ID, id);
+			observableImpl.getObservers().stream().forEach(observer -> observer
+					.update(Arrays.asList(new Change<DetailedSector>(new DetailedSector().id(id), ChangeType.rem))));
 		} catch (EmptyResultDataAccessException e) {
 			throw new DAONotFoundException(
 					new DBError(DBErrorCode.RESOURCE_NOT_DELETED, String.format("Sector id '%s' was not deleted", id)));
@@ -131,11 +150,23 @@ public class JDBCTemplateSectorDAO extends JdbcDaoSupport implements SectorDAO {
 	public boolean deleteByName(String name) {
 		try {
 			this.getJdbcTemplate().update(DELETE_BY_NAME, name);
+			observableImpl.getObservers().stream().forEach(observer -> observer.update(Arrays.asList(
+					new Change<DetailedSector>((DetailedSector) new DetailedSector().setName(name), ChangeType.rem))));
 		} catch (EmptyResultDataAccessException e) {
 			throw new DAONotFoundException(new DBError(DBErrorCode.RESOURCE_NOT_DELETED,
 					String.format("Sector name '%s' was not deleted", name)));
 		}
 		return true;
+	}
+
+	@Override
+	public void subscribe(Observer<DetailedSector> observer) {
+		observableImpl.subscribe(observer);
+	}
+
+	@Override
+	public void unsubscribe(Observer<DetailedSector> observer) {
+		observableImpl.unsubscribe(observer);
 	}
 
 }

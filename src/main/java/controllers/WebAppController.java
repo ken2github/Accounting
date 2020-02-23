@@ -14,6 +14,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -29,11 +31,14 @@ import model2.DetailedTransaction;
 import model2.Metric;
 import model2.Transaction;
 import restapi.bankfileconverter.api.OutputFileInfo;
+import restapi.transactionsoracle.api.Cacher_1;
 import restapi.transactionsoracle.service.TransactionsOracle;
 
 @Controller
 @RequestMapping("/balancing")
 public class WebAppController {
+
+	Logger logger = LoggerFactory.getLogger(WebAppController.class);
 
 	public enum UPLOAD_PAGE_STATUS {
 		START, ERROR, UPLOADED;
@@ -63,10 +68,14 @@ public class WebAppController {
 	private BalancesIndexAPIController biAPI;
 
 	@Autowired
+	private Cacher_1 cacher;
+
+	@Autowired
 	private TransactionsOracle bta;
 
 	@RequestMapping("/home")
 	public String home(Map<String, Object> model) {
+		logger.info("GET /home");
 		model.put("message", this.message);
 		model.put("indexMenu", getIndexMenu());
 		return "home";
@@ -74,6 +83,7 @@ public class WebAppController {
 
 	@RequestMapping("/user-guide")
 	public String userGuide(Map<String, Object> model) {
+		logger.info("GET /user-guide");
 		model.put("message", this.message);
 		model.put("indexMenu", getIndexMenu());
 		return "user-guide";
@@ -88,7 +98,7 @@ public class WebAppController {
 		indexMenu.add(String.format(item, "Staging", "staged-transactions"));
 		indexMenu.add(String.format(item, "StagingFiltered", "staged-transactions-filtered"));
 		indexMenu.add(String.format(item, "Status", "status"));
-		indexMenu.add(String.format(item, "Graphs", "to-do-page"));
+		indexMenu.add(String.format(item, "Graphs", "graph/treeMap"));
 		indexMenu.add(String.format(item, "UserGuide", "user-guide"));
 
 		return indexMenu;
@@ -96,16 +106,36 @@ public class WebAppController {
 
 	@RequestMapping("/to-do-page")
 	public String toDoPage(Map<String, Object> model) {
+		logger.info("GET /to-do-page");
 		return "d3-example";
+	}
+
+	@RequestMapping("/graph/treeMap")
+	public String graphTreeMap(Map<String, Object> model) {
+		logger.info("GET /graph/treeMap");
+		System.out.println("Pippo");
+		model.put("message", this.message);
+		model.put("indexMenu", getIndexMenu());
+		return "treeMap";
 	}
 
 	@RequestMapping("/google")
 	public String google(Map<String, Object> model) {
+		logger.info("GET /google");
 		return "google-example";
+	}
+
+	@RequestMapping("/google/treemap")
+	public String googleTreeMap(Map<String, Object> model) {
+		logger.info("GET /google");
+
+		return "treeMap";
 	}
 
 	@RequestMapping("/status")
 	public String status(Map<String, Object> model) {
+		logger.info("GET /status");
+
 		// find all accounts
 		List<DetailedCount> counts = cAPI.findAll();
 
@@ -167,6 +197,7 @@ public class WebAppController {
 
 	@RequestMapping("/uploadfile")
 	public String uploadfile(Map<String, Object> model) {
+		logger.info("GET /uploadfile");
 
 		model.put("status", UPLOAD_PAGE_STATUS.START);
 		model.put("indexMenu", getIndexMenu());
@@ -175,6 +206,7 @@ public class WebAppController {
 
 	@RequestMapping("/uploadedfile")
 	public String uploadfile(Map<String, Object> model, @RequestParam("file") MultipartFile file) {
+		logger.info("GET /uploadfile with file");
 		if (file != null) {
 			try {
 				// convert file to transactions
@@ -460,7 +492,7 @@ public class WebAppController {
 
 	@RequestMapping("/staged-transactions")
 	public String stagedTransactions(Map<String, Object> model) {
-		System.out.println("Edit inside Controller");
+		logger.info("GET /staged-transactions");
 
 		List<DetailedSector> sectors = sAPI.findAll().stream()
 				.sorted((ds1, ds2) -> ds1.getName().compareTo(ds2.getName())).collect(Collectors.toList());
@@ -475,7 +507,7 @@ public class WebAppController {
 
 	@RequestMapping("/staged-transactions-filtered/search")
 	public String stagedTransactionsFilteredSearch(Map<String, Object> model, @RequestParam("filter") String filter) {
-		System.out.println("Edit inside Filtered Controller");
+		logger.info("GET /staged-transactions-filtered/search with filter");
 
 		List<DetailedSector> sectors = sAPI.findAll().stream()
 				.sorted((ds1, ds2) -> ds1.getName().compareTo(ds2.getName())).collect(Collectors.toList());
@@ -505,7 +537,7 @@ public class WebAppController {
 	public String stagedTransactionsFilteredSearch(Map<String, Object> model,
 			@RequestParam("appliedFilter") String appliedFilter, @RequestParam("isCommon") String isCommon,
 			@RequestParam("sectorName") String sector) {
-		System.out.println("Edit inside Filtered Controller update");
+		logger.info("GET /staged-transactions-filtered/update with appliedFilter, isCommon, sector");
 
 		List<DetailedSector> sectors = sAPI.findAll().stream()
 				.sorted((ds1, ds2) -> ds1.getName().compareTo(ds2.getName())).collect(Collectors.toList());
@@ -539,7 +571,7 @@ public class WebAppController {
 
 	@RequestMapping("/staged-transactions-filtered")
 	public String stagedTransactionsFiltered(Map<String, Object> model) {
-		System.out.println("Edit inside Filtered Controller");
+		logger.info("GET /staged-transactions-filtered");
 
 		List<DetailedSector> sectors = sAPI.findAll().stream()
 				.sorted((ds1, ds2) -> ds1.getName().compareTo(ds2.getName())).collect(Collectors.toList());
@@ -557,9 +589,7 @@ public class WebAppController {
 
 	@RequestMapping("/staged-transactions/edit")
 	public String stagedTransactions(Map<String, Object> model, @RequestParam("edit") String edit) {
-		if (edit != null) {
-			System.out.println("Edit inside");
-		}
+		logger.info("GET /staged-transactions-filtered/edit with edit");
 
 		List<DetailedSector> sectors = sAPI.findAll().stream()
 				.sorted((ds1, ds2) -> ds1.getName().compareTo(ds2.getName())).collect(Collectors.toList());
@@ -575,8 +605,8 @@ public class WebAppController {
 	@RequestMapping("/staged-transactions/edit/{transactionId}")
 	public String viewStagedTransaction(Map<String, Object> model,
 			@PathVariable("transactionId") final String transactionId) {
+		logger.info("GET /staged-transactions-filtered/edit/{transactionId}");
 
-		System.out.println("Right enter");
 		List<DetailedSector> sectors = sAPI.findAll().stream()
 				.sorted((ds1, ds2) -> ds1.getName().compareTo(ds2.getName())).collect(Collectors.toList());
 		model.put("sectors", sectors);
@@ -593,6 +623,8 @@ public class WebAppController {
 			@PathVariable("transactionId") final String transactionId, @RequestParam("save") String save,
 			@RequestParam("next") String next, @RequestParam("submit") String submit,
 			@RequestParam("isCommon") String isCommon, @RequestParam("sectorName") String sectorName) {
+		logger.info(
+				"POST /staged-transactions-filtered/save/{transactionId} with transactionId, save, next, submit, isCommon, sectorName");
 
 		List<DetailedSector> sectors = sAPI.findAll().stream()
 				.sorted((ds1, ds2) -> ds1.getName().compareTo(ds2.getName())).collect(Collectors.toList());
@@ -631,6 +663,7 @@ public class WebAppController {
 
 	@RequestMapping("/staged-transactions/commitAllTransactions")
 	public String commitAllTransactions(Map<String, Object> model, @RequestParam("actionType") String actionType) {
+		logger.info("POST /staged-transactions-filtered/commitAllTransactions with actionType");
 
 		List<DetailedTransaction> stagedTransactions = stAPI.findAll();
 

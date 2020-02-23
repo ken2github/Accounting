@@ -170,7 +170,7 @@ public class BankTransactionAnalyser implements TransactionsOracle {
 
 		@Override
 		public boolean equals(Object obj) {
-			if (obj instanceof TransactionWeight)
+			if (obj instanceof SectorWeight)
 				return this.sector.equals(((SectorWeight) obj).getSector());
 			return false;
 		}
@@ -231,9 +231,10 @@ public class BankTransactionAnalyser implements TransactionsOracle {
 		List<TransactionWeight> weightedTransactionsHavingAtLeastOneCommonToken = getWeightedTransactionsHavingAtLeastOneCommonToken(
 				transaction, relevance);
 
-		System.out.println(String.format("TR:[%s]", transaction.getTitle()));
-		weightedTransactionsHavingAtLeastOneCommonToken.stream().forEach(
-				wt -> System.out.println(String.format("SIM:[%s] TR:[%s]", wt.weight, wt.transaction.getTitle())));
+		// System.out.println(String.format("TR:[%s]", transaction.getTitle()));
+		// weightedTransactionsHavingAtLeastOneCommonToken.stream().forEach(
+		// wt -> System.out.println(String.format("SIM:[%s] TR:[%s]", wt.weight,
+		// wt.transaction.getTitle())));
 
 		// return secsec(weightedTransactionsHavingAtLeastOneCommonToken, maxResults);
 
@@ -330,9 +331,10 @@ public class BankTransactionAnalyser implements TransactionsOracle {
 		List<TransactionWeight> weightedTransactionsHavingAtLeastOneCommonToken = getWeightedTransactionsHavingAtLeastOneCommonToken(
 				transaction, relevance);
 
-		System.out.println(String.format("TR:[%s]", transaction.getTitle()));
-		weightedTransactionsHavingAtLeastOneCommonToken.stream().forEach(
-				wt -> System.out.println(String.format("SIM:[%s] TR:[%s]", wt.weight, wt.transaction.getTitle())));
+		// System.out.println(String.format("TR:[%s]", transaction.getTitle()));
+		// weightedTransactionsHavingAtLeastOneCommonToken.stream().forEach(
+		// wt -> System.out.println(String.format("SIM:[%s] TR:[%s]", wt.weight,
+		// wt.transaction.getTitle())));
 
 		// return secsec(weightedTransactionsHavingAtLeastOneCommonToken, maxResults);
 

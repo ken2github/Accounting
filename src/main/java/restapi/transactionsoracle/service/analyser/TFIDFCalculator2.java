@@ -75,4 +75,11 @@ public class TFIDFCalculator2 implements StringSimilarityCalculator {
 		return Math.pow(tokens.stream().mapToDouble(token -> Math.pow(log10_tfidf(Collections.frequency(tokens, token),
 				tokens.size(), numberOfSentences, numberOfSentencesWithAToken.apply(token)), 2)).sum(), 0.5);
 	}
+
+	@Override
+	public List<Double> getSimilarities(List<String> aSentence, List<List<String>> otherSentences,
+			Function<String, Integer> numberOfSentencesWithAToken, int numberOfSentences) {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }

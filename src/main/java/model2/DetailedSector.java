@@ -13,6 +13,11 @@ public class DetailedSector extends Sector {
 		return id;
 	}
 
+	public DetailedSector id(String id) {
+		this.id = id;
+		return this;
+	}
+
 	public void setId(String id) {
 		this.id = id;
 	}

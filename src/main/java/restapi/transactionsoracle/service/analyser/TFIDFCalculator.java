@@ -1,8 +1,12 @@
 package restapi.transactionsoracle.service.analyser;
 
+import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.function.Function;
+import java.util.stream.Collectors;
 
 import restapi.transactionsoracle.api.StringSimilarityCalculator;
 
@@ -64,5 +68,27 @@ public class TFIDFCalculator implements StringSimilarityCalculator {
 												2))
 								.sum(),
 						0.5));
+	}
+
+	@Override
+	public List<Double> getSimilarities(List<String> aSentence, List<List<String>> otherSentences,
+			Function<String, Integer> numberOfSentencesWithAToken, int numberOfSentences) {
+		List<Double> similarities = new ArrayList<>();
+
+		Map<String, Double> normalized_tfidf_map = new HashMap<String, Double>();
+
+		aSentence.stream().distinct().forEach(token -> normalized_tfidf_map.put(token,
+				normalized_tfidf(token, aSentence, numberOfSentencesWithAToken, numberOfSentences)));
+
+		otherSentences.stream().map(anotherSentence -> aSentence.stream().distinct().mapToDouble(token -> {
+			if (anotherSentence.contains(token)) {
+				return normalized_tfidf_map.get(token)
+						* normalized_tfidf(token, anotherSentence, numberOfSentencesWithAToken, numberOfSentences);
+			} else {
+				return 0;
+			}
+		}).sum()).collect(Collectors.toList());
+
+		return similarities;
 	}
 }
