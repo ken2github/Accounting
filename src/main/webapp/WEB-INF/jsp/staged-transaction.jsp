@@ -103,7 +103,7 @@
 		    <td class="<%=tdclass%>"><%=sdf.format(dt.getDate())%></td>
 		    <td  class="<%=(dt.getAmount().signum() <= 0)?tdclassRed:tdclassGreen%>" align="right"><%=df.format(dt.getAmount()).toString()%></td>
 		    <td class="<%=tdclass%>"><%=dt.getTitle()%></td>
-		    <%
+		    <%		    
 		    	if(dt.isCommon()==null){
 		    %>
 		    		<td class="<%=(tdclass+"red")%>">

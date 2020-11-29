@@ -58,7 +58,7 @@ public class JDBCTemplateStagedTransactionDAO extends JdbcDaoSupport
 		DetailedTransaction dt = findById(id);
 
 		observableImpl.getObservers().stream().forEach(
-				observer -> observer.update(Arrays.asList(new Change<DetailedTransaction>(dt, ChangeType.mod))));
+				observer -> observer.update(Arrays.asList(new Change<DetailedTransaction>(dt, ChangeType.add))));
 
 		return dt;
 	}

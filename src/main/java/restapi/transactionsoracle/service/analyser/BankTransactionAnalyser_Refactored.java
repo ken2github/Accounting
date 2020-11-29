@@ -1,8 +1,13 @@
 package restapi.transactionsoracle.service.analyser;
 
+import static java.lang.Double.compare;
+import static java.util.stream.Collectors.toList;
+
 import java.util.List;
 import java.util.Optional;
+import java.util.function.Function;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -40,6 +45,7 @@ public class BankTransactionAnalyser_Refactored implements TransactionsOracle {
 			SimilarityRelevance relevance) {
 		// ((Cache_ManuelRefreshImpl) cache).refreshInternalMapIfNeeded(false, true);
 
+		System.out.println("REFACTO2");
 		List<TransactionWeight_1> weightedTransactionsHavingAtLeastOneCommonToken = getWeightedTransactionsHavingAtLeastOneCommonToken(
 				transaction, relevance, false, true);
 
@@ -54,7 +60,7 @@ public class BankTransactionAnalyser_Refactored implements TransactionsOracle {
 			SimilarityRelevance relevance) {
 		// ((Cache_ManuelRefreshImpl) this.cache).refreshInternalMapIfNeeded(true,
 		// false);
-
+		System.out.println("REFACTO");
 		List<TransactionWeight_1> weightedTransactionsHavingAtLeastOneCommonToken = getWeightedTransactionsHavingAtLeastOneCommonToken(
 				transaction, relevance, true, false);
 
@@ -72,18 +78,46 @@ public class BankTransactionAnalyser_Refactored implements TransactionsOracle {
 				.getTransactionsHavingAtLeastOneCommonToken(transactionTokens, getAlsoTransactionWithNullSector,
 						getAlsoTransactionWithNullIsCommon);
 
-		List<Double> similarities = similarityCalculator.getSimilarities(transactionTokens,
-				transactionsHavingAtLeastOneCommonToken.stream().map(tti -> tti.tokens).collect(Collectors.toList()),
-				(String a) -> {
-					return cache.transactionsContainingTokenInSet(a, getAlsoTransactionWithNullSector,
-							getAlsoTransactionWithNullIsCommon);
-				}, cache.getTransactionSetSize());
+		System.out.println("transactionsHavingAtLeastOneCommonToken=" + transactionsHavingAtLeastOneCommonToken.size());
 
-		final int[] idx = { 0 };
-		List<TransactionWeight_1> weightedTransactionsHavingAtLeastOneCommonToken = similarities.stream()
-				.map(similarity -> new TransactionWeight_1().setWeight(similarity)
-						.setTransaction(transactionsHavingAtLeastOneCommonToken.get(idx[0]++).getTransaction()))
-				.sorted((wt1, wt2) -> Double.compare(wt2.getWeight(), wt1.getWeight())).collect(Collectors.toList());
+		List<String> aSentence = transactionTokens;
+		List<List<String>> otherSentences = transactionsHavingAtLeastOneCommonToken.stream().map(tti -> tti.tokens)
+				.collect(Collectors.toList());
+		System.out.println(otherSentences.size());
+		Function<String, Integer> numberOfSentencesWithAToken = (String a) -> {
+			return cache.transactionsContainingTokenInSet(a, getAlsoTransactionWithNullSector,
+					getAlsoTransactionWithNullIsCommon);
+		};
+		int numberOfSentences = cache.getTransactionSetSize();
+		List<Double> similarities = similarityCalculator.getSimilarities(aSentence, otherSentences,
+				numberOfSentencesWithAToken, numberOfSentences);
+
+		System.out.println(similarities.size());
+
+		List<TransactionWeight_1> weightedTransactionsHavingAtLeastOneCommonToken = IntStream
+				.range(0, similarities.size()).boxed()
+				.map(pos -> new TransactionWeight_1().setWeight(similarities.get(pos))
+						.setTransaction(transactionsHavingAtLeastOneCommonToken.get(pos).getTransaction()))
+				.sorted((wt1, wt2) -> compare(wt2.getWeight(), wt1.getWeight())).collect(toList());
+
+		System.out.println(weightedTransactionsHavingAtLeastOneCommonToken.size());
+		weightedTransactionsHavingAtLeastOneCommonToken
+				.forEach(wt -> System.out.println(wt.transaction.getTitle() + " ->" + wt.weight));
+
+		// List<TransactionWeight_1> weightedTransactionsHavingAtLeastOneCommonToken =
+		// similarities.stream()
+		// .map(similarity -> new TransactionWeight_1().setWeight(similarity)
+		// .setTransaction(transactionsHavingAtLeastOneCommonToken.get(position.).getTransaction()))
+		// .sorted((wt1, wt2) -> Double.compare(wt2.getWeight(),
+		// wt1.getWeight())).collect(Collectors.toList());
+
+		// final int[] idx = { 0 };
+		// List<TransactionWeight_1> weightedTransactionsHavingAtLeastOneCommonToken =
+		// similarities.stream()
+		// .map(similarity -> new TransactionWeight_1().setWeight(similarity)
+		// .setTransaction(transactionsHavingAtLeastOneCommonToken.get(idx[0]++).getTransaction()))
+		// .sorted((wt1, wt2) -> Double.compare(wt2.getWeight(),
+		// wt1.getWeight())).collect(Collectors.toList());
 
 		// List<TransactionWeight_1> weightedTransactionsHavingAtLeastOneCommonToken =
 		// transactionsHavingAtLeastOneCommonToken

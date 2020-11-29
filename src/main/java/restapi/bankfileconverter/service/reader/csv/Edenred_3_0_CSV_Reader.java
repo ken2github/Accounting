@@ -16,7 +16,7 @@ import com.opencsv.CSVReader;
 import model2.Transaction;
 import restapi.bankfileconverter.service.reader.xls.ReadersHelper;
 
-public class Edenred_2_0_CSV_Reader extends AbstractCSVReader {
+public class Edenred_3_0_CSV_Reader extends AbstractCSVReader {
 
 	public static SimpleDateFormat INTERNAL_DATA_FORMAT = new SimpleDateFormat("dd/MM/yyyy");
 
@@ -32,6 +32,20 @@ public class Edenred_2_0_CSV_Reader extends AbstractCSVReader {
 
 	public static final String PATTERN2_REGEXP = "^" + AMOUNT2_REGEXP_PART;
 
+	// public static final String AMOUNT3 = "AMOUNT3";
+	//
+	// public static final String AMOUNT3_REGEXP_PART = "(?<" + AMOUNT3 +
+	// ">[-]?[\\d]*)";
+	//
+	// public static final String PATTERN3_REGEXP = "^" + AMOUNT3_REGEXP_PART;
+	//
+	// public static final String AMOUNT4 = "AMOUNT4";
+	//
+	// public static final String AMOUNT4_REGEXP_PART = "(?<" + AMOUNT4 + ">[\\d]*
+	// €)";
+	//
+	// public static final String PATTERN4_REGEXP = "^" + AMOUNT4_REGEXP_PART;
+
 	// private static final int TRANSACTIONS_INITIAL_ROW_INDEX = 1;
 
 	private static final String[] COMPLIANT_HEADERS = { "Date", "Type", "Montant", "Détails" };
@@ -39,7 +53,7 @@ public class Edenred_2_0_CSV_Reader extends AbstractCSVReader {
 	private static final int SKIP_LINES = 0;
 	private static final boolean IGNORE_QUOTATION = true;
 
-	public Edenred_2_0_CSV_Reader(Reader r) {
+	public Edenred_3_0_CSV_Reader(Reader r) {
 		initCVSReaderWithData(r, new AbstractCSVReader.CompliancyFormatConstants(COMPLIANT_HEADERS, SEPARATOR,
 				IGNORE_QUOTATION, SKIP_LINES));
 	}
@@ -56,6 +70,8 @@ public class Edenred_2_0_CSV_Reader extends AbstractCSVReader {
 			String description = null;
 			BigDecimal amount = null;
 			List<ReadersHelper.TitleItem> titleItems = new ArrayList<>();
+			BigDecimal euros = new BigDecimal(0);
+			BigDecimal cents = new BigDecimal(0);
 			boolean isConfirmedTransaction = true;
 			for (int c = 0; c < values.length; c++) {
 				cell = values[c];
@@ -64,40 +80,34 @@ public class Edenred_2_0_CSV_Reader extends AbstractCSVReader {
 					case 0: // Date
 						date = INTERNAL_DATA_FORMAT.parse(cell);
 						break;
-					case 1: // Status de la transaction
-						titleItems.add(new ReadersHelper.TitleItem("Status", cell));
+					case 1: // Type de la transaction
+						titleItems.add(new ReadersHelper.TitleItem("Type", cell));
 						String cellToLowercase = cell.toLowerCase();
-						if (!(cellToLowercase.contains("transaction effectuée")
-								|| cellToLowercase.contains("chargement")
-								|| cellToLowercase.contains("transaction confirmée") || cellToLowercase.equals(""))) {
-							if (cellToLowercase.contains("refusée") || cellToLowercase.contains("replace card")) {
-								// Skip this transaction
-								isConfirmedTransaction = false;
-							} else if (cellToLowercase.contains("transaction en cours de traitement")) {
-								// Skip this transaction
-								isConfirmedTransaction = false;
-							} else {
-								throw new RuntimeException("NOT_IMPLEMENTED : Unknown Transaction Status '" + (cell)
-										+ "' for transaction '" + row + "'");
-							}
+						if (!("débit".equals(cellToLowercase) || "crédit".equals(cellToLowercase))) {
+							throw new RuntimeException("NOT_IMPLEMENTED : Unknown Transaction Type '" + (cell)
+									+ "' for transaction '" + row + "'");
 						}
 						break;
-					case 2: // Montant
+					case 2: // Status de la transaction
+						titleItems.add(new ReadersHelper.TitleItem("Status", cell));
+						cellToLowercase = cell.toLowerCase();
+						if (!"succès".equals(cellToLowercase)) {
+							throw new RuntimeException("NOT_IMPLEMENTED : Unknown Transaction Status '" + (cell)
+									+ "' for transaction '" + row + "'");
+						}
+						break;
+					case 3: // Montant
 						Pattern p = Pattern.compile(PATTERN_REGEXP);
-						Pattern p2 = Pattern.compile(PATTERN2_REGEXP);
 						Matcher m = p.matcher(cell);
-						Matcher m2 = p2.matcher(cell);
 						if (m.matches()) {
 							amount = new BigDecimal(m.group(AMOUNT).replaceAll(",", "."));
-						} else if (m2.matches()) {
-							amount = new BigDecimal(m2.group(AMOUNT2).replaceAll(",", "."));
 						} else {
-							throw new RuntimeException(String.format(
-									"NOT_IMPLEMENTED : Expected patterns '%s' or '%s' were not matched by '%s'",
-									PATTERN_REGEXP, PATTERN2_REGEXP, cell));
+							throw new RuntimeException(
+									String.format("NOT_IMPLEMENTED : Expected patterns '%s' were not matched by '%s'",
+											PATTERN_REGEXP, cell));
 						}
 						break;
-					case 3: // Details
+					case 4: // Details
 						description = cell.replaceAll("([\\r]*[\\n]*)", "");
 						break;
 					default:

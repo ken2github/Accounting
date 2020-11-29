@@ -45,7 +45,9 @@ public class TransactionsOracleConfiguration {
 	@Bean
 	@DependsOn({ "stringTokenizer", "stringSimilarityCalculator", "cacher_1" })
 	public TransactionsOracle transactionOracle() {
+		// return new BankTransactionAnalyser();
 		return new BankTransactionAnalyser_Refactored();
+		// return new BankTransactionAnalyser();
 	}
 
 }

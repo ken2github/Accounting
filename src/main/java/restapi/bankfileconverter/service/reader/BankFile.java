@@ -8,6 +8,7 @@ import java.util.List;
 
 import restapi.bankfileconverter.api.Count;
 import restapi.bankfileconverter.service.reader.csv.Edenred_2_0_CSV_Reader;
+import restapi.bankfileconverter.service.reader.csv.Edenred_3_0_CSV_Reader;
 import restapi.bankfileconverter.service.reader.xls.BNP_1_0_XLS_Reader;
 import restapi.bankfileconverter.service.reader.xls.BPN_1_0_XLS_Reader;
 import restapi.bankfileconverter.service.reader.xls.BPN_1_1_XLS_Reader;
@@ -33,6 +34,8 @@ public class BankFile {
 			return new Edenred_1_0_XLS_Reader(is);
 		case EDENRED_2_0:
 			return new Edenred_2_0_CSV_Reader((Reader) new InputStreamReader(is));
+		case EDENRED_3_0:
+			return new Edenred_3_0_CSV_Reader((Reader) new InputStreamReader(is));
 		case INTERNAL_1_0:
 			return new Internal_1_0_XLS_Reader(is);
 		case INTERNAL_2_0:
@@ -56,7 +59,7 @@ public class BankFile {
 		case YOUCARD:
 			return Arrays.asList(BankFileFormat.YOUCARD_1_0);
 		case EDENRED:
-			return Arrays.asList(BankFileFormat.EDENRED_1_0, BankFileFormat.EDENRED_2_0);
+			return Arrays.asList(BankFileFormat.EDENRED_1_0, BankFileFormat.EDENRED_2_0, BankFileFormat.EDENRED_3_0);
 		case TKTRESTO:
 		case ASSMUL:
 		case HOLD:

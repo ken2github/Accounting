@@ -264,6 +264,9 @@ public class BankTransactionAnalyser2 implements TransactionsOracle {
 	@Override
 	public Optional<Boolean> suggestIsCommonForTransaction(Transaction transaction, SimilarityRelevance relevance) {
 		// TODO Auto-generated method stub
+
+		System.out.println("BT2");
+
 		return null;
 	}
 

@@ -331,6 +331,9 @@ public class BankTransactionAnalyser implements TransactionsOracle {
 		List<TransactionWeight> weightedTransactionsHavingAtLeastOneCommonToken = getWeightedTransactionsHavingAtLeastOneCommonToken(
 				transaction, relevance);
 
+		System.out.println("BT ");
+		System.out.println(weightedTransactionsHavingAtLeastOneCommonToken.size());
+
 		// System.out.println(String.format("TR:[%s]", transaction.getTitle()));
 		// weightedTransactionsHavingAtLeastOneCommonToken.stream().forEach(
 		// wt -> System.out.println(String.format("SIM:[%s] TR:[%s]", wt.weight,

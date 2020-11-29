@@ -310,6 +310,8 @@ public class BankTransactionAnalyser3 implements TransactionsOracle {
 	@Override
 	public Optional<Boolean> suggestIsCommonForTransaction(Transaction transaction, SimilarityRelevance relevance) {
 		// TODO Auto-generated method stub
+		System.out.println("BT3");
+
 		return null;
 	}
 

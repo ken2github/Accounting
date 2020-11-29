@@ -118,6 +118,20 @@ public class WebAppController {
 		return "treeMap";
 	}
 
+	@RequestMapping("/graph/treeMap/submit")
+	public String graphTreeMap(Map<String, Object> model, @RequestParam("year") String year,
+			@RequestParam("month") String month, @RequestParam("isCommon") String isCommon,
+			@RequestParam("flow") String flow, @RequestParam("auto") String auto) {
+		logger.info("GET /graph/treeMap/submit");
+		model.put("message", this.message);
+		model.put("indexMenu", getIndexMenu());
+		model.put("year", year);
+		model.put("isCommon", isCommon);
+		model.put("flow", flow);
+		model.put("auto", auto);
+		return "treeMap";
+	}
+
 	@RequestMapping("/google")
 	public String google(Map<String, Object> model) {
 		logger.info("GET /google");

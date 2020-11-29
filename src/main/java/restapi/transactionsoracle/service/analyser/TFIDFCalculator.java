@@ -80,14 +80,15 @@ public class TFIDFCalculator implements StringSimilarityCalculator {
 		aSentence.stream().distinct().forEach(token -> normalized_tfidf_map.put(token,
 				normalized_tfidf(token, aSentence, numberOfSentencesWithAToken, numberOfSentences)));
 
-		otherSentences.stream().map(anotherSentence -> aSentence.stream().distinct().mapToDouble(token -> {
-			if (anotherSentence.contains(token)) {
-				return normalized_tfidf_map.get(token)
-						* normalized_tfidf(token, anotherSentence, numberOfSentencesWithAToken, numberOfSentences);
-			} else {
-				return 0;
-			}
-		}).sum()).collect(Collectors.toList());
+		similarities.addAll(
+				otherSentences.stream().map(anotherSentence -> aSentence.stream().distinct().mapToDouble(token -> {
+					if (anotherSentence.contains(token)) {
+						return normalized_tfidf_map.get(token) * normalized_tfidf(token, anotherSentence,
+								numberOfSentencesWithAToken, numberOfSentences);
+					} else {
+						return 0;
+					}
+				}).sum()).collect(Collectors.toList()));
 
 		return similarities;
 	}
