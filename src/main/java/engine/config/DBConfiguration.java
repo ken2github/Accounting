@@ -11,6 +11,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 
 import dao.AccountedYearDAO;
 import dao.CountDAO;
+import dao.CountsBalancesByYearMonthDAO;
 import dao.IndexesDAO;
 import dao.IndexesDAO2;
 import dao.SectorDAO;
@@ -18,6 +19,7 @@ import dao.StagedTransactionDAO;
 import dao.TransactionDAO;
 import dao.jdbc.JDBCTemplateAccountedYearDAO;
 import dao.jdbc.JDBCTemplateCountDAO;
+import dao.jdbc.JDBCTemplateCountsBalancesByYearMonth;
 import dao.jdbc.JDBCTemplateIndexesDAO;
 import dao.jdbc.JDBCTemplateIndexesDAO_GENERIC;
 import dao.jdbc.JDBCTemplateSectorDAO;
@@ -110,6 +112,13 @@ public class DBConfiguration {
 	@Bean
 	public IndexesDAO2 indexDAO2() {
 		JDBCTemplateIndexesDAO sdao = new JDBCTemplateIndexesDAO();
+		sdao.setDataSource(dataSource());
+		return sdao;
+	}
+
+	@Bean
+	public CountsBalancesByYearMonthDAO countsBalancesByYearMonthDAO() {
+		JDBCTemplateCountsBalancesByYearMonth sdao = new JDBCTemplateCountsBalancesByYearMonth();
 		sdao.setDataSource(dataSource());
 		return sdao;
 	}

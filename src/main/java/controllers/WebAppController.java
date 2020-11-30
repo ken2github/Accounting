@@ -4,6 +4,7 @@ import java.math.BigDecimal;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.Instant;
+import java.time.Year;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
@@ -99,6 +100,7 @@ public class WebAppController {
 		indexMenu.add(String.format(item, "StagingFiltered", "staged-transactions-filtered"));
 		indexMenu.add(String.format(item, "Status", "status"));
 		indexMenu.add(String.format(item, "Graphs", "graph/treeMap"));
+		indexMenu.add(String.format(item, "Diagrams", "diagram/lines"));
 		indexMenu.add(String.format(item, "UserGuide", "user-guide"));
 
 		return indexMenu;
@@ -108,6 +110,24 @@ public class WebAppController {
 	public String toDoPage(Map<String, Object> model) {
 		logger.info("GET /to-do-page");
 		return "d3-example";
+	}
+
+	@RequestMapping("/diagram/lines")
+	public String diagramLines(Map<String, Object> model) {
+		logger.info("GET /diagram/lines");
+		model.put("message", this.message);
+		model.put("indexMenu", getIndexMenu());
+		model.put("year", String.valueOf(Year.now().getValue()));
+		return "lines";
+	}
+
+	@RequestMapping("/diagram/lines/submit")
+	public String diagramLinesSubmit(Map<String, Object> model, @RequestParam("year") String year) {
+		logger.info("GET /diagram/lines/submit");
+		model.put("message", this.message);
+		model.put("indexMenu", getIndexMenu());
+		model.put("year", year);
+		return "lines";
 	}
 
 	@RequestMapping("/graph/treeMap")
