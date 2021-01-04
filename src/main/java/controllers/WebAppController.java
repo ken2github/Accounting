@@ -101,6 +101,7 @@ public class WebAppController {
 		indexMenu.add(String.format(item, "Status", "status"));
 		indexMenu.add(String.format(item, "Graphs", "graph/treeMap"));
 		indexMenu.add(String.format(item, "Diagrams", "diagram/lines"));
+		indexMenu.add(String.format(item, "CheckMTR", "checking/mtr"));
 		indexMenu.add(String.format(item, "UserGuide", "user-guide"));
 
 		return indexMenu;
@@ -128,6 +129,24 @@ public class WebAppController {
 		model.put("indexMenu", getIndexMenu());
 		model.put("year", year);
 		return "lines";
+	}
+
+	@RequestMapping("/checking/mtr")
+	public String checkMtr(Map<String, Object> model) {
+		logger.info("GET /checking/mtr");
+		model.put("message", this.message);
+		model.put("indexMenu", getIndexMenu());
+		model.put("year", String.valueOf(Year.now().getValue()));
+		return "checkMTR";
+	}
+
+	@RequestMapping("/checking/mtr/submit")
+	public String checkMtrSubmit(Map<String, Object> model, @RequestParam("year") String year) {
+		logger.info("GET /checking/mtr/submit");
+		model.put("message", this.message);
+		model.put("indexMenu", getIndexMenu());
+		model.put("year", year);
+		return "checkMTR";
 	}
 
 	@RequestMapping("/graph/treeMap")

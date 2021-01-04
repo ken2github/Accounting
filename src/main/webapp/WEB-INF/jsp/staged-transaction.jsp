@@ -261,6 +261,14 @@ if(!isLast){
 </table>
 
 </form>
-
+<p></p>
+<p>Notice on 'XXX' special categories: </p>
+<ul>
+<li>'XXX.MISSINGINFO' : transaction is NOT IDENTIFIED (*),</li>
+<li>'XXX.EXTRA' : transaction is IDENTIFIED (*) but does not yet exist corresponding category for it,</li>
+<li>'XXX.FAKE' : transaction is not real one, example: for MONEY transaction is often added to accomodate actual and calculated balances.</li>
+</ul>
+<p></p>
+<p> (*) 'IDENTIFIED' means that we know transaction amount/date but we don't know/remember/recognize the reason (no idea of source/destination, no idea of context, ...).</p>
 </body>
 </html>

@@ -15,4 +15,6 @@ public interface TransactionDAO {
 	DetailedTransaction findById(String id);
 
 	List<DetailedTransaction> findByYearMonth(int year, int month);
+
+	List<DetailedTransaction> findByYearMonthSector(int year, int month, String sector);
 }

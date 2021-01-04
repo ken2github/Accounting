@@ -31,6 +31,7 @@ public class JDBCTemplateTransactionDAO extends JdbcDaoSupport
 	protected static final String UPDATE_SQL = "UPDATE transactions SET amount = ?, title = ?, sector_id = ?, is_common = ?, count_id = ?, date = ? WHERE id = ?";
 	protected static final String SELECT_BY_ID_SQL = "SELECT * FROM all_transactions WHERE id = ? and is_automatic = false";
 	protected static final String SELECT_BY_YEAR_MONTH_SQL = "SELECT * FROM all_transactions WHERE YEAR(date)=? and MONTH(date)=?";
+	protected static final String SELECT_BY_YEAR_MONTH_SECTOR_SQL = "SELECT * FROM all_transactions WHERE YEAR(date)=? and MONTH(date)=? and sector_name=?";
 
 	protected static final String DELETE_BY_ID = "DELETE FROM transactions where id=?";
 
@@ -152,6 +153,13 @@ public class JDBCTemplateTransactionDAO extends JdbcDaoSupport
 	public List<DetailedTransaction> findByYearMonth(int year, int month) {
 		List<DetailedTransaction> lds = this.getJdbcTemplate().query(SELECT_BY_YEAR_MONTH_SQL,
 				BeanPropertyRowMapper.newInstance(DetailedTransaction.class), year, month);
+		return lds;
+	}
+
+	@Override
+	public List<DetailedTransaction> findByYearMonthSector(int year, int month, String sector) {
+		List<DetailedTransaction> lds = this.getJdbcTemplate().query(SELECT_BY_YEAR_MONTH_SECTOR_SQL,
+				BeanPropertyRowMapper.newInstance(DetailedTransaction.class), year, month, sector);
 		return lds;
 	}
 

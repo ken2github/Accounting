@@ -106,8 +106,8 @@ function drawChart() {
 	]);
     var options = {
     	chart: {
-        	title: 'Year Balances',
-            subtitle: 'in millions of dollars (USD)'
+        	title: 'Year Balance (L)',
+            subtitle: 'of large balances'
 		},
         width: 1000,
         height: 500
@@ -123,8 +123,8 @@ function drawChart() {
 	]);
     var options = {
     	chart: {
-        	title: 'Year Balances',
-            subtitle: 'in millions of dollars (USD)'
+        	title: 'Year Balance (M)',
+            subtitle: 'of medium balances'
 		},
         width: 1000,
         height: 500
@@ -140,8 +140,8 @@ function drawChart() {
 	]);
     var options = {
     	chart: {
-        	title: 'Year Balances',
-            subtitle: 'in millions of dollars (USD)'
+        	title: 'Year Balance (S)',
+            subtitle: 'of small balances'
 		},
         width: 1000,
         height: 500
